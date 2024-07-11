@@ -21,6 +21,7 @@
     "@sequelize-graphql/core": "^1.2.6",
     "dataloader": "^2.2.2",
     "graphql": "^16.9.0",
+    "mariadb": "^3.3.1",
     "sequelize": "^6.37.3",
     "tsx": "^4.16.2"
   },
