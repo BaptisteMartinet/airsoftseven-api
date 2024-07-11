@@ -3,24 +3,26 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
-    "start": "npm run compile && node ./dist/index.js"
+    "start": "tsx --env-file=.env src/index.ts",
+    "dev": "tsx watch --env-file=.env src/index.ts",
+    "run-script": "tsx --env-file=.env",
+    "gs": "npm run-script src/scripts/writeSchema.ts > schema.graphql"
   },
   "keywords": [
     "airsoftseven",
     "airsoft",
     "matchmaking"
   ],
-  "author": "",
+  "author": "Baptiste Martinet",
   "license": "ISC",
-  "description": "",
-  "type": "module",
+  "description": "Airsoft matchmaking made easy",
   "dependencies": {
     "@apollo/server": "^4.10.4",
     "@sequelize-graphql/core": "^1.2.6",
     "dataloader": "^2.2.2",
     "graphql": "^16.9.0",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "tsx": "^4.16.2"
   },
   "devDependencies": {
     "@types/node": "^20.14.10",
