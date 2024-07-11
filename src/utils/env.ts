@@ -1,4 +1,4 @@
-export function ensureEnvVariable(variable: string) {
+function ensureEnvVariable(variable: string) {
   const value = process.env[variable];
   if (value === undefined) throw new Error(`Missing env variable ${variable}`);
   return value;
@@ -28,4 +28,15 @@ export function ensureEnvBool(variable: string) {
   const value = ensureEnvVariable(variable);
   if (value === "true" || value === "false") return value === "true";
   throw new Error(`Invalid env variable ${variable} type. Should be Bool`);
+}
+
+export function ensureEnvUrl(variable: string) {
+  const value = ensureEnvVariable(variable);
+  try {
+    return new URL(value);
+  } catch (err) {
+    throw new Error(
+      `Invalid env variable ${variable} type. Should be a valid URL`
+    );
+  }
 }
