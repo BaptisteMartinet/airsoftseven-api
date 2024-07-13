@@ -1,3 +1,3 @@
-import { RequiredEnvString } from '@utils/env';
+import { ensureEnvString } from '@utils/env';
 
-export const DATABASE_URL = RequiredEnvString("DATABASE_URL");
+export const DATABASE_URL = ensureEnvString("DATABASE_URL");
