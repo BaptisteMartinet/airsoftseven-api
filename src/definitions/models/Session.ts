@@ -6,6 +6,7 @@ import { User } from './index';
 
 export interface SessionModel extends InferModelAttributesWithDefaults<SessionModel> {
   token: string;
+  refreshToken: string;
   expireAt: Date;
   userId: IdType;
 }
@@ -14,6 +15,7 @@ const Session: Model<SessionModel> = new Model({
   name: 'User',
   columns: {
     token: { type: STRING, allowNull: false, exposed: true },
+    refreshToken: { type: STRING, allowNull: false, exposed: true },
     expireAt: { type: DATE, allowNull: false, exposed: true },
     userId: { type: ID, allowNull: false, exposed: true },
   },
