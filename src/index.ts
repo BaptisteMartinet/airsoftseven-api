@@ -6,6 +6,7 @@ import db from "./db";
 async function main() {
   await db.authenticate();
   console.info("DB successfully setup");
+  await db.sync({ force: true }); // TODO remove
   const server = new ApolloServer({ schema });
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
