@@ -1,15 +1,11 @@
-function ensureEnvVariable(variable: string) {
+export function ensureEnvString(variable: string) {
   const value = process.env[variable];
   if (value === undefined) throw new Error(`Missing env variable ${variable}`);
   return value;
 }
 
-export function ensureEnvString(variable: string) {
-  return ensureEnvVariable(variable);
-}
-
 export function ensureEnvInt(variable: string) {
-  const rawValue = ensureEnvVariable(variable);
+  const rawValue = ensureEnvString(variable);
   const value = parseInt(rawValue);
   if (isNaN(value))
     throw new Error(`Invalid env variable ${variable} type. Should be Int`);
@@ -17,7 +13,7 @@ export function ensureEnvInt(variable: string) {
 }
 
 export function ensureEnvFloat(variable: string) {
-  const rawValue = ensureEnvVariable(variable);
+  const rawValue = ensureEnvString(variable);
   const value = parseFloat(rawValue);
   if (isNaN(value))
     throw new Error(`Invalid env variable ${variable} type. Should be Float`);
@@ -25,13 +21,13 @@ export function ensureEnvFloat(variable: string) {
 }
 
 export function ensureEnvBool(variable: string) {
-  const value = ensureEnvVariable(variable);
+  const value = ensureEnvString(variable);
   if (value === "true" || value === "false") return value === "true";
   throw new Error(`Invalid env variable ${variable} type. Should be Bool`);
 }
 
 export function ensureEnvUrl(variable: string) {
-  const value = ensureEnvVariable(variable);
+  const value = ensureEnvString(variable);
   try {
     return new URL(value);
   } catch (err) {
