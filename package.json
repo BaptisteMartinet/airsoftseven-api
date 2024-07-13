@@ -5,8 +5,8 @@
   "scripts": {
     "start": "tsx --env-file=.env src/index.ts",
     "dev": "tsx watch --env-file=.env src/index.ts",
-    "run-script": "tsx --env-file=.env",
-    "gs": "npm run --silent run-script src/scripts/writeSchema.ts > schema.graphql"
+    "script": "tsx --env-file=.env",
+    "gs": "npm run --silent script src/scripts/writeSchema.ts > schema.graphql"
   },
   "keywords": [
     "airsoftseven",
