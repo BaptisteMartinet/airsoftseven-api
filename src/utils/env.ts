@@ -7,22 +7,20 @@ export function ensureEnvString(variable: string) {
 export function ensureEnvInt(variable: string) {
   const rawValue = ensureEnvString(variable);
   const value = parseInt(rawValue);
-  if (isNaN(value))
-    throw new Error(`Invalid env variable ${variable} type. Should be Int`);
+  if (isNaN(value)) throw new Error(`Invalid env variable ${variable} type. Should be Int`);
   return value;
 }
 
 export function ensureEnvFloat(variable: string) {
   const rawValue = ensureEnvString(variable);
   const value = parseFloat(rawValue);
-  if (isNaN(value))
-    throw new Error(`Invalid env variable ${variable} type. Should be Float`);
+  if (isNaN(value)) throw new Error(`Invalid env variable ${variable} type. Should be Float`);
   return value;
 }
 
 export function ensureEnvBool(variable: string) {
   const value = ensureEnvString(variable);
-  if (value === "true" || value === "false") return value === "true";
+  if (value === 'true' || value === 'false') return value === 'true';
   throw new Error(`Invalid env variable ${variable} type. Should be Bool`);
 }
 
@@ -31,8 +29,6 @@ export function ensureEnvUrl(variable: string) {
   try {
     return new URL(value);
   } catch (err) {
-    throw new Error(
-      `Invalid env variable ${variable} type. Should be a valid URL`
-    );
+    throw new Error(`Invalid env variable ${variable} type. Should be a valid URL`);
   }
 }

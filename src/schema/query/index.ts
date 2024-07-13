@@ -1,12 +1,12 @@
-import { GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLObjectType, GraphQLString } from 'graphql';
 
 export default new GraphQLObjectType({
-  name: "Query",
+  name: 'Query',
   fields: {
     helloWorld: {
       type: GraphQLString,
       resolve() {
-        return "Hello World";
+        return 'Hello World';
       },
     },
   },
