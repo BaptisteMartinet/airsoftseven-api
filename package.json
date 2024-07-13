@@ -20,6 +20,7 @@
     "@apollo/server": "^4.10.4",
     "@sequelize-graphql/core": "^1.3.0",
     "dataloader": "^2.2.2",
+    "date-fns": "^3.6.0",
     "graphql": "^16.9.0",
     "jsonwebtoken": "^9.0.2",
     "mariadb": "^3.3.1",
