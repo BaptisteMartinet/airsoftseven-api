@@ -1,12 +1,20 @@
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { DATE, ID, Model, STRING } from '@sequelize-graphql/core';
+import { DATE, ID, Model, STRING, INTEGER } from '@sequelize-graphql/core';
 import db from '@db/index';
 import { User, Club, Field } from './index';
+
+/**
+ * TODO
+ * - Puissances des repliques
+ * - Horaires
+ */
 
 export interface GameModel extends InferModelAttributesWithDefaults<GameModel> {
   title: string;
   date: Date;
+  price: number | null;
+  publicUrl: string | null;
   authorId: IdType;
   clubId: IdType;
   fieldId: IdType;
@@ -17,6 +25,8 @@ const Game: Model<GameModel> = new Model({
   columns: {
     title: { type: STRING, allowNull: false, exposed: true },
     date: { type: DATE, allowNull: false, exposed: true },
+    price: { type: INTEGER, allowNull: true, exposed: true },
+    publicUrl: { type: STRING, allowNull: true, exposed: true },
     authorId: { type: ID, allowNull: false, exposed: false },
     clubId: { type: ID, allowNull: false, exposed: false },
     fieldId: { type: ID, allowNull: false, exposed: false },

@@ -14,7 +14,7 @@ const User: Model<UserModel> = new Model({
   name: 'User',
   columns: {
     username: { type: STRING, allowNull: false, exposed: true },
-    email: { type: STRING, allowNull: false, exposed: true },
+    email: { type: STRING, allowNull: false, exposed: false },
     passwordHash: { type: STRING, allowNull: false, exposed: false },
   },
   associations: () => ({
