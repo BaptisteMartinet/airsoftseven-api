@@ -1,6 +1,6 @@
 import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { Model, STRING, INTEGER, BOOLEAN } from '@sequelize-graphql/core';
+import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import db from '@db/index';
 import { Game } from './index';
 
