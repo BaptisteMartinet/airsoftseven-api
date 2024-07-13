@@ -2,6 +2,7 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import schema from "./schema";
 import db from "./db";
+import context from './context';
 
 async function main() {
   await db.authenticate();
@@ -10,6 +11,7 @@ async function main() {
   const server = new ApolloServer({ schema });
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
+    context,
   });
   console.info(`Server ready at: ${url}`);
 }
