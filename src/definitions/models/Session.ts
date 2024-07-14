@@ -1,18 +1,22 @@
-import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
+import type { CreationOptional } from 'sequelize';
+import type { IdType, InferModelAttributes } from '@sequelize-graphql/core';
 
 import { DATE, ID, Model, STRING } from '@sequelize-graphql/core';
 import db from '@db/index';
 import { User } from './index';
 
-export interface SessionModel extends InferModelAttributesWithDefaults<SessionModel> {
+export interface SessionModel extends InferModelAttributes<SessionModel> {
+  id: CreationOptional<IdType>;
   token: string;
   refreshToken: string;
   expireAt: Date;
   userId: IdType;
+  createdAt: CreationOptional<Date>;
+  updatedAt: CreationOptional<Date>;
 }
 
 const Session: Model<SessionModel> = new Model({
-  name: 'User',
+  name: 'Session',
   columns: {
     token: { type: STRING, allowNull: false, exposed: true },
     refreshToken: { type: STRING, allowNull: false, exposed: true },
