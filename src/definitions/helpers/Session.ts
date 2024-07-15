@@ -26,7 +26,7 @@ export function makeEmailVerificationToken(userId: IdType) {
 export function ensureEmailVerificationTokenPayload(token: string) {
   const payload = jwt.verify(token, JWT_SECRET_KEY);
   if (typeof payload === 'string') throw new Error('Invalid payload type');
-  const { userId } = payload;
-  if (!userId) throw new Error('Invalid payload userId');
+  const { userId, type } = payload;
+  if (!userId || type !== 'emailVerification') throw new Error('Invalid verification payload');
   return userId as IdType;
 }
