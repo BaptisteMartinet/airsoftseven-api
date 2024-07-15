@@ -19,3 +19,15 @@ export async function createSession(userId: IdType) {
   const refreshToken = jwt.sign(session.id, JWT_SECRET_KEY, { expiresIn });
   return session.update({ token, refreshToken });
 }
+
+export function makeEmailVerificationToken(userId: IdType) {
+  return jwt.sign({ userId, type: 'emailVerification' }, JWT_SECRET_KEY, { expiresIn: '10m' });
+}
+
+export function ensureEmailVerificationTokenPayload(token: string) {
+  const payload = jwt.verify(token, JWT_SECRET_KEY);
+  if (typeof payload === 'string') throw new Error('Invalid payload type');
+  const { userId } = payload;
+  if (!userId) throw new Error('Invalid payload userId');
+  return userId as IdType;
+}

@@ -1,6 +1,6 @@
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { Session, User } from '@definitions/models';
-import { createSession } from '@definitions/helpers/Session';
+import { createSession, ensureEmailVerificationTokenPayload } from '@definitions/helpers/Session';
 import { hashPassword, comparePassword } from '@utils/password';
 import { onUserRegister } from '@notifications/dispatchers';
 
@@ -30,12 +30,16 @@ export default new GraphQLObjectType({
     },
 
     verifyAccount: {
-      type: new GraphQLNonNull(Session.type),
+      type: new GraphQLNonNull(GraphQLBoolean),
       args: {
         token: { type: new GraphQLNonNull(GraphQLString) },
       },
-      resolve() {
-        return null;
+      async resolve(_, args, ctx) {
+        const { token } = args;
+        const userId = ensureEmailVerificationTokenPayload(token);
+        const user = await User.ensureExistence(userId, { ctx });
+        await user.update({ emailVerified: true });
+        return true;
       },
     },
 
@@ -54,20 +58,21 @@ export default new GraphQLObjectType({
       },
     },
 
-    refresh: {
-      type: new GraphQLNonNull(Session.type),
-      args: {},
-      resolve() {
-        return null;
-      },
-    },
+    // refresh: {
+    //   type: new GraphQLNonNull(Session.type),
+    //   resolve(_, args, ctx) {
+    //     // todo
+    //     return null;
+    //   },
+    // },
 
-    logout: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-      resolve(_, args, ctx) {
-        return true;
-      },
-    },
+    // logout: {
+    //   type: new GraphQLNonNull(GraphQLBoolean),
+    //   args: {},
+    //   resolve(_, args, ctx) {
+    //     return true;
+    //   },
+    // },
 
     // forgotPassword: {},
     // resetPassword: {},
