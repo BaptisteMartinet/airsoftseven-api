@@ -3,7 +3,7 @@ import type { IdType, InferModelAttributes } from '@sequelize-graphql/core';
 
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import db from '@db/index';
-import { Event } from './index';
+import { Event, Session } from './index';
 
 export interface UserModel extends InferModelAttributes<UserModel> {
   id: CreationOptional<IdType>;
@@ -30,6 +30,11 @@ const User: Model<UserModel> = new Model({
   associations: () => ({
     events: {
       model: Event,
+      type: 'hasMany',
+      exposed: true,
+    },
+    sessions: {
+      model: Session,
       type: 'hasMany',
       exposed: true,
     },
