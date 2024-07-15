@@ -3,7 +3,6 @@ import type { IdType, InferModelAttributes } from '@sequelize-graphql/core';
 
 import { DATE, ID, Model, STRING } from '@sequelize-graphql/core';
 import db from '@db/index';
-import { User } from './index';
 
 export interface SessionModel extends InferModelAttributes<SessionModel> {
   id: CreationOptional<IdType>;
@@ -24,11 +23,12 @@ const Session: Model<SessionModel> = new Model({
     userId: { type: ID, allowNull: false, exposed: true },
   },
   associations: () => ({
-    user: {
-      model: User,
-      type: 'belongsTo',
-      exposed: true,
-    },
+    // TODO disabled because weirdly making sync crash
+    // user: {
+    //   model: User,
+    //   type: 'belongsTo',
+    //   exposed: true,
+    // },
   }),
   sequelize: db,
 });
