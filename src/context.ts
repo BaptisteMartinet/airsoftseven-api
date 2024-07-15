@@ -7,12 +7,15 @@ import { strToLanguage } from '@definitions/helpers/language';
 export type Context = Awaited<ReturnType<typeof createContext>>;
 
 export default async function createContext(args: { req: IncomingMessage; res: ServerResponse }) {
-  const { req } = args;
+  const { req, res } = args;
   const contentLanguageHeader = req.headers['content-language'];
   const language = contentLanguageHeader ? strToLanguage(contentLanguageHeader) : DefaultLanguage;
-  // TODO auth
+  const token = req.headers.authorization ?? null;
   return {
     ...makeContext(),
+    req,
+    res,
     language,
+    token,
   };
 }
