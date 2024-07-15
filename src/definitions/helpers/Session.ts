@@ -1,13 +1,12 @@
 import type { IdType } from '@sequelize-graphql/core';
 
 import * as jwt from 'jsonwebtoken';
-import { addMonths, differenceInSeconds } from 'date-fns';
+import { differenceInSeconds } from 'date-fns';
 import { Session } from '@definitions/models';
 import { JWT_SECRET_KEY } from '@constants/env';
 
-export async function createSession(userId: IdType) {
-  const now = new Date();
-  const expireAt = addMonths(now, 3);
+export async function createSession(userId: IdType, opts: { now: Date; expireAt: Date }) {
+  const { now, expireAt } = opts;
   const session = await Session.model.create({
     token: '', // Will be filled
     refreshToken: '', // Will be filled

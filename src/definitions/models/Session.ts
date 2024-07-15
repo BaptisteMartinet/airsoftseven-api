@@ -1,4 +1,4 @@
-import type { CreationOptional } from 'sequelize';
+import type { CreationOptional, ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributes } from '@sequelize-graphql/core';
 
 import { DATE, ID, Model, STRING } from '@sequelize-graphql/core';
@@ -10,7 +10,7 @@ export interface SessionModel extends InferModelAttributes<SessionModel> {
   token: string;
   refreshToken: string;
   expireAt: Date;
-  userId: IdType;
+  userId: ForeignKey<IdType>;
   createdAt: CreationOptional<Date>;
   updatedAt: CreationOptional<Date>;
 }

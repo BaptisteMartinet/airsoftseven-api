@@ -1,8 +1,8 @@
-import type { CSSProperties, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { ensureStylesType } from './index';
+import ensureStylesType from './ensureStylesType';
 
 export interface RenderEmailArgs {
   title?: string;

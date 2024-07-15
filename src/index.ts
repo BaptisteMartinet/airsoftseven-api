@@ -1,5 +1,10 @@
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
+// import cookieParser from 'cookie-parser';
 import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import schema from './schema';
 import db from './db';
 import context from './context';
@@ -8,12 +13,30 @@ async function main() {
   await db.authenticate();
   console.info('DB successfully setup');
   await db.sync({ force: true }); // TODO remove
-  const server = new ApolloServer({ schema });
-  const { url } = await startStandaloneServer(server, {
-    listen: { port: 4000 },
-    context,
+
+  const app = express();
+  const httpServer = http.createServer(app);
+  const server = new ApolloServer({
+    schema,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
-  console.info(`Server ready at: ${url}`);
+  await server.start();
+
+  app.use(
+    '/',
+    cors<cors.CorsRequest>({
+      origin: true, // TODO airsfoturl,
+      credentials: true,
+    }),
+    express.json({ limit: '50mb' }),
+    // cookieParser(),
+    expressMiddleware(server, {
+      context,
+    }),
+  );
+
+  await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
+  console.log(`Server ready at http://localhost:4000/`);
 }
 
 main().catch(console.error);

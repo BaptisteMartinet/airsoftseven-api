@@ -1,10 +1,13 @@
+import type { Context } from '@/context';
+
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { addMonths, differenceInMilliseconds } from 'date-fns';
 import { Session, User } from '@definitions/models';
 import { createSession, ensureEmailVerificationTokenPayload } from '@definitions/helpers/Session';
 import { hashPassword, comparePassword } from '@utils/password';
 import { onUserRegister } from '@notifications/dispatchers';
 
-export default new GraphQLObjectType({
+export default new GraphQLObjectType<unknown, Context>({
   name: 'SessionMutation',
   fields: {
     register: {
@@ -54,7 +57,13 @@ export default new GraphQLObjectType({
         const user = await User.model.findOne({ where: { email, emailVerified: true } });
         if (user === null) throw new Error('Email or password is invalid'); // TODO custom error
         if (!comparePassword(password, user.passwordHash)) throw new Error('Email or password is invalid'); // TODO custom error
-        return createSession(user.id);
+        const now = new Date();
+        const expireAt = addMonths(now, 3);
+        const maxAge = differenceInMilliseconds(now, expireAt);
+        const session = await createSession(user.id, { now, expireAt });
+        const refreshToken = session.refreshToken;
+        ctx.res.cookie('refreshToken', refreshToken, { maxAge, httpOnly: true, secure: true });
+        return session;
       },
     },
 
