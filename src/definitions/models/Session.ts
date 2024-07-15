@@ -19,7 +19,7 @@ const Session: Model<SessionModel> = new Model({
   name: 'Session',
   columns: {
     token: { type: STRING, allowNull: false, exposed: true },
-    refreshToken: { type: STRING, allowNull: false, exposed: true },
+    refreshToken: { type: STRING, allowNull: false, exposed: false },
     expireAt: { type: DATE, allowNull: false, exposed: true },
     userId: { type: ID, allowNull: false, exposed: true },
   },
