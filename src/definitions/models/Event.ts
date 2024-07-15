@@ -10,7 +10,7 @@ import { User, Club, Field } from './index';
  * - Horaires
  */
 
-export interface GameModel extends InferModelAttributesWithDefaults<GameModel> {
+export interface EventModel extends InferModelAttributesWithDefaults<EventModel> {
   title: string;
   date: Date;
   price: number | null;
@@ -20,8 +20,8 @@ export interface GameModel extends InferModelAttributesWithDefaults<GameModel> {
   fieldId: IdType;
 }
 
-const Game: Model<GameModel> = new Model({
-  name: 'Game',
+const Event: Model<EventModel> = new Model({
+  name: 'Event',
   columns: {
     title: { type: STRING, allowNull: false, exposed: true },
     date: { type: DATE, allowNull: false, exposed: true },
@@ -51,4 +51,4 @@ const Game: Model<GameModel> = new Model({
   sequelize: db,
 });
 
-export default Game;
+export default Event;

@@ -2,7 +2,7 @@ import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import db from '@db/index';
-import { Game } from './index';
+import { Event } from './index';
 
 /**
  * TODO Gerer les points suivants
@@ -33,8 +33,8 @@ const Club: Model<ClubModel> = new Model({
     acceptUnderage: { type: BOOLEAN, allowNull: true, exposed: true },
   },
   associations: () => ({
-    games: {
-      model: Game,
+    events: {
+      model: Event,
       type: 'hasMany',
       exposed: true,
     },

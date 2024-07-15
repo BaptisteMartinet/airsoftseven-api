@@ -2,7 +2,7 @@ import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { DOUBLE, Model, STRING } from '@sequelize-graphql/core';
 import db from '@db/index';
-import { Game } from './index';
+import { Event } from './index';
 
 export interface FieldModel extends InferModelAttributesWithDefaults<FieldModel> {
   title: string;
@@ -22,8 +22,8 @@ const Field: Model<FieldModel> = new Model({
     longitude: { type: DOUBLE, allowNull: false, exposed: true },
   },
   associations: () => ({
-    games: {
-      model: Game,
+    events: {
+      model: Event,
       type: 'hasMany',
       exposed: true,
     },

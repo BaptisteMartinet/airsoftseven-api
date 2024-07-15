@@ -3,7 +3,7 @@ import type { IdType, InferModelAttributes } from '@sequelize-graphql/core';
 
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import db from '@db/index';
-import { Game } from './index';
+import { Event } from './index';
 
 export interface UserModel extends InferModelAttributes<UserModel> {
   id: CreationOptional<IdType>;
@@ -28,8 +28,8 @@ const User: Model<UserModel> = new Model({
     { fields: ['email'], unique: true },
   ],
   associations: () => ({
-    games: {
-      model: Game,
+    events: {
+      model: Event,
       type: 'hasMany',
       exposed: true,
     },
