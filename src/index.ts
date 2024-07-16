@@ -5,9 +5,10 @@ import cookieParser from 'cookie-parser';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import schema from './schema';
+import { PORT } from '@constants/env';
 import db from './db';
 import context from './context';
+import schema from './schema';
 
 async function main() {
   await db.authenticate();
@@ -35,8 +36,8 @@ async function main() {
     }),
   );
 
-  await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
-  console.log(`Server ready at http://localhost:4000/`);
+  await new Promise<void>((resolve) => httpServer.listen({ port: PORT }, resolve));
+  console.info(`Server ready at http://localhost:${PORT}/`);
 }
 
 main().catch(console.error);
