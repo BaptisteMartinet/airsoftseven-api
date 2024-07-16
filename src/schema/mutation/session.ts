@@ -6,8 +6,9 @@ import { hashPassword, comparePassword } from '@utils/password';
 import { signJWT } from '@utils/jwt';
 import { Session, User } from '@definitions/models';
 import {
-  createSession,
   ensureEmailVerificationTokenPayload,
+  createSession,
+  ensureSession,
   ensureSessionFromToken,
 } from '@definitions/helpers/Session';
 import { onUserRegister } from '@notifications/dispatchers';
@@ -93,9 +94,7 @@ export default new GraphQLObjectType<unknown, Context>({
     logout: {
       type: new GraphQLNonNull(GraphQLBoolean),
       async resolve(_, args, ctx) {
-        const { token } = ctx;
-        if (!token) throw new Error('Invalid token');
-        const session = await ensureSessionFromToken(token);
+        const session = await ensureSession(ctx);
         await session.update({ closedAt: new Date() });
         return true;
       },

@@ -37,6 +37,12 @@ export async function ensureSessionFromToken(token: string) {
   return session;
 }
 
+export async function ensureSession(ctx: Context) {
+  const { token } = ctx;
+  if (!token) throw new Error('Missing token');
+  return ensureSessionFromToken(token);
+}
+
 async function _ensureSessionUser(token: string) {
   const { sessionId } = verifyJWT(token);
   if (!sessionId) throw new Error('Invalid sessionId');

@@ -1,6 +1,6 @@
 import { GraphQLObjectType } from 'graphql';
 import { Session } from '@definitions/models';
-import { ensureSessionUser } from '@/definitions/helpers/Session';
+import { ensureSession } from '@/definitions/helpers/Session';
 
 export default new GraphQLObjectType({
   name: 'Query',
@@ -9,7 +9,7 @@ export default new GraphQLObjectType({
       type: Session.type,
       async resolve(_, args, ctx) {
         try {
-          return ensureSessionUser(ctx);
+          return await ensureSession(ctx);
         } catch (e) {
           return null;
         }
