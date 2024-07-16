@@ -3,9 +3,13 @@ import type { Context } from '@/context';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { addMonths, differenceInMilliseconds } from 'date-fns';
 import { hashPassword, comparePassword } from '@utils/password';
-import { signJWT, verifyJWT } from '@utils/jwt';
+import { signJWT } from '@utils/jwt';
 import { Session, User } from '@definitions/models';
-import { createSession, ensureEmailVerificationTokenPayload } from '@definitions/helpers/Session';
+import {
+  createSession,
+  ensureEmailVerificationTokenPayload,
+  ensureSessionFromToken,
+} from '@definitions/helpers/Session';
 import { onUserRegister } from '@notifications/dispatchers';
 
 export default new GraphQLObjectType<unknown, Context>({
@@ -79,12 +83,9 @@ export default new GraphQLObjectType<unknown, Context>({
         const { token } = ctx;
         const { refreshToken } = ctx.req.cookies;
         if (!token || !refreshToken) throw new Error('Unable to refresh session');
-        const { sessionId } = verifyJWT(refreshToken);
-        if (!sessionId) throw new Error('Invalid sessionId');
-        const session = await Session.ensureExistence(sessionId, { ctx });
-        if (session.closedAt) throw new Error('Session is closed');
+        const session = await ensureSessionFromToken(refreshToken);
         if (session.token !== token || session.refreshToken !== refreshToken) throw new Error('Tokens do not match');
-        const newToken = signJWT({ sessionId }, { expiresIn: '5m' });
+        const newToken = signJWT({ sessionId: session.id }, { expiresIn: '5m' });
         return session.update({ token: newToken });
       },
     },
@@ -94,11 +95,8 @@ export default new GraphQLObjectType<unknown, Context>({
       async resolve(_, args, ctx) {
         const { token } = ctx;
         if (!token) throw new Error('Invalid token');
-        const { sessionId } = verifyJWT(token);
-        const session = await Session.ensureExistence(sessionId, { ctx });
-        if (session.closedAt) throw new Error('Session is already closed');
-        const now = new Date();
-        await session.update({ closedAt: now });
+        const session = await ensureSessionFromToken(token);
+        await session.update({ closedAt: new Date() });
         return true;
       },
     },

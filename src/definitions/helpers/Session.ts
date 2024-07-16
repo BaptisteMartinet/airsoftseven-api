@@ -30,6 +30,13 @@ export function ensureEmailVerificationTokenPayload(token: string) {
   return userId as IdType;
 }
 
+export async function ensureSessionFromToken(token: string) {
+  const { sessionId } = verifyJWT(token);
+  const session = await Session.ensureExistence(sessionId);
+  if (session.closedAt) throw new Error('Session is already closed');
+  return session;
+}
+
 async function _ensureSessionUser(token: string) {
   const { sessionId } = verifyJWT(token);
   if (!sessionId) throw new Error('Invalid sessionId');
