@@ -3,7 +3,7 @@ import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { Event, Session } from './index';
+import { Club, Event, Field, Session } from './index';
 
 export interface UserModel extends InferModelAttributesWithDefaults<UserModel> {
   username: string;
@@ -25,13 +25,23 @@ const User: Model<UserModel> = new Model({
     { fields: ['email'], unique: true },
   ],
   associations: () => ({
-    events: {
-      model: Event,
+    sessions: {
+      model: Session,
+      type: 'hasMany',
+      exposed: false,
+    },
+    clubs: {
+      model: Club,
       type: 'hasMany',
       exposed: true,
     },
-    sessions: {
-      model: Session,
+    fields: {
+      model: Field,
+      type: 'hasMany',
+      exposed: true,
+    },
+    events: {
+      model: Event,
       type: 'hasMany',
       exposed: true,
     },
