@@ -82,19 +82,26 @@ export default new GraphQLObjectType<unknown, Context>({
         const { sessionId } = verifyJWT(refreshToken);
         if (!sessionId) throw new Error('Invalid sessionId');
         const session = await Session.ensureExistence(sessionId, { ctx });
+        if (session.closedAt) throw new Error('Session is closed');
         if (session.token !== token || session.refreshToken !== refreshToken) throw new Error('Tokens do not match');
         const newToken = signJWT({ sessionId }, { expiresIn: '5m' });
         return session.update({ token: newToken });
       },
     },
 
-    // logout: {
-    //   type: new GraphQLNonNull(GraphQLBoolean),
-    //   args: {},
-    //   resolve(_, args, ctx) {
-    //     return true;
-    //   },
-    // },
+    logout: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      async resolve(_, args, ctx) {
+        const { token } = ctx;
+        if (!token) throw new Error('Invalid token');
+        const { sessionId } = verifyJWT(token);
+        const session = await Session.ensureExistence(sessionId, { ctx });
+        if (session.closedAt) throw new Error('Session is already closed');
+        const now = new Date();
+        await session.update({ closedAt: now });
+        return true;
+      },
+    },
 
     // forgotPassword: {},
     // resetPassword: {},
