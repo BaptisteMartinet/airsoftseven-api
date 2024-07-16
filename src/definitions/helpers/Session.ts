@@ -14,7 +14,7 @@ export async function createSession(userId: IdType, opts: { now: Date; expireAt:
     userId,
   });
   const token = jwt.sign(session.id, JWT_SECRET_KEY, { expiresIn: '5m' });
-  const expiresIn = differenceInSeconds(now, expireAt);
+  const expiresIn = differenceInSeconds(expireAt, now);
   const refreshToken = jwt.sign(session.id, JWT_SECRET_KEY, { expiresIn });
   return session.update({ token, refreshToken });
 }

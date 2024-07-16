@@ -59,10 +59,14 @@ export default new GraphQLObjectType<unknown, Context>({
         if (!comparePassword(password, user.passwordHash)) throw new Error('Email or password is invalid'); // TODO custom error
         const now = new Date();
         const expireAt = addMonths(now, 3);
-        const maxAge = differenceInMilliseconds(now, expireAt);
         const session = await createSession(user.id, { now, expireAt });
-        const refreshToken = session.refreshToken;
-        ctx.res.cookie('refreshToken', refreshToken, { maxAge, httpOnly: true, secure: true });
+        const maxAge = differenceInMilliseconds(expireAt, now);
+        ctx.res.cookie('refreshToken', session.refreshToken, {
+          maxAge,
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+        });
         return session;
       },
     },
