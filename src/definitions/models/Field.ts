@@ -5,7 +5,7 @@ import sequelize from '@db/index';
 import { Event } from './index';
 
 export interface FieldModel extends InferModelAttributesWithDefaults<FieldModel> {
-  title: string;
+  name: string;
   description: string;
   address: string;
   latitude: string;
@@ -15,7 +15,7 @@ export interface FieldModel extends InferModelAttributesWithDefaults<FieldModel>
 const Field: Model<FieldModel> = new Model({
   name: 'Field',
   columns: {
-    title: { type: STRING, allowNull: false, exposed: true },
+    name: { type: STRING, allowNull: false, exposed: true },
     description: { type: STRING, allowNull: true, exposed: true },
     address: { type: STRING, allowNull: false, exposed: true },
     latitude: { type: DOUBLE, allowNull: false, exposed: true },
