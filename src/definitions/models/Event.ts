@@ -16,6 +16,7 @@ export interface EventModel extends InferModelAttributesWithDefaults<EventModel>
   date: Date;
   price: number | null;
   publicUrl: string | null;
+
   userId: ForeignKey<IdType>;
   clubId: ForeignKey<IdType>;
   fieldId: ForeignKey<IdType>;

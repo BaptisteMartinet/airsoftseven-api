@@ -9,6 +9,7 @@ export interface SessionModel extends InferModelAttributesWithDefaults<SessionMo
   token: string;
   refreshToken: string;
   expireAt: Date;
+
   userId: ForeignKey<IdType>;
 }
 
