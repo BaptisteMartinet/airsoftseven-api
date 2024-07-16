@@ -9,7 +9,7 @@ import { onUserRegister } from '@notifications/dispatchers';
 
 export default new GraphQLObjectType<unknown, Context>({
   name: 'SessionMutation',
-  fields: {
+  fields: () => ({
     register: {
       type: new GraphQLNonNull(GraphQLBoolean),
       args: {
@@ -85,5 +85,5 @@ export default new GraphQLObjectType<unknown, Context>({
 
     // forgotPassword: {},
     // resetPassword: {},
-  },
+  }),
 });
