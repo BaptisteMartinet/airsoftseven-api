@@ -1,8 +1,9 @@
+import type { Context } from '@/context';
 import type { IdType } from '@sequelize-graphql/core';
 
 import { differenceInSeconds } from 'date-fns';
 import { signJWT, verifyJWT } from '@utils/jwt';
-import { Session } from '@definitions/models';
+import { Session, User } from '@definitions/models';
 
 export async function createSession(userId: IdType, opts: { now: Date; expireAt: Date }) {
   const { now, expireAt } = opts;
@@ -27,4 +28,18 @@ export function ensureEmailVerificationTokenPayload(token: string) {
   const { userId, type } = payload;
   if (!userId || type !== 'emailVerification') throw new Error('Invalid verification payload');
   return userId as IdType;
+}
+
+async function _ensureSessionUser(token: string) {
+  const { sessionId } = verifyJWT(token);
+  if (!sessionId) throw new Error('Invalid sessionId');
+  const session = await Session.ensureExistence(sessionId);
+  const user = await User.ensureExistence(session.userId);
+  return user;
+}
+
+export async function ensureSessionUser(ctx: Context) {
+  const { token } = ctx;
+  if (!token) throw new Error('Missing token');
+  return ctx.memoized(_ensureSessionUser, token);
 }
