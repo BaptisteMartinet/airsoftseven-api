@@ -1,12 +1,19 @@
 import type { Request, Response } from 'express';
+import type { Context as ContextBase } from '@sequelize-graphql/core';
+import type { Language } from '@definitions/enums';
 
 import { makeContext } from '@sequelize-graphql/core';
 import { DefaultLanguage } from '@constants/language';
 import { strToLanguage } from '@definitions/helpers/language';
 
-export type Context = Awaited<ReturnType<typeof createContext>>;
+export interface Context extends ContextBase {
+  req: Request;
+  res: Response;
+  language: Language;
+  token: string | null;
+}
 
-export default async function createContext(args: { req: Request; res: Response }) {
+export default async function createContext(args: { req: Request; res: Response }): Promise<Context> {
   const { req, res } = args;
   const contentLanguageHeader = req.headers['content-language'];
   const language = contentLanguageHeader ? strToLanguage(contentLanguageHeader) : DefaultLanguage;
