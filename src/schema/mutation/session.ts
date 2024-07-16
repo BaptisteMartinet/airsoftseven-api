@@ -57,8 +57,8 @@ export default new GraphQLObjectType<unknown, Context>({
       async resolve(_, args, ctx) {
         const { email, password } = args;
         const user = await User.model.findOne({ where: { email, emailVerified: true } });
-        if (user === null) throw new Error('Email or password is invalid'); // TODO custom error
-        if (!comparePassword(password, user.passwordHash)) throw new Error('Email or password is invalid'); // TODO custom error
+        const passwordMatch = comparePassword(password, user?.passwordHash ?? '') && user !== null;
+        if (!passwordMatch) throw new Error('Email or password is invalid'); // TODO custom error
         const now = new Date();
         const expireAt = addMonths(now, 3);
         const session = await createSession(user.id, { now, expireAt });
