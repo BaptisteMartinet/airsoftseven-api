@@ -2,7 +2,7 @@ import type { CreationOptional } from 'sequelize';
 import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
-import db from '@db/index';
+import sequelize from '@db/index';
 import { Event, Session } from './index';
 
 export interface UserModel extends InferModelAttributesWithDefaults<UserModel> {
@@ -36,7 +36,7 @@ const User: Model<UserModel> = new Model({
       exposed: true,
     },
   }),
-  sequelize: db,
+  sequelize,
 });
 
 export default User;

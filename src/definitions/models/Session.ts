@@ -2,7 +2,7 @@ import type { ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { DATE, Model, STRING } from '@sequelize-graphql/core';
-import db from '@db/index';
+import sequelize from '@db/index';
 import { User } from './index';
 
 export interface SessionModel extends InferModelAttributesWithDefaults<SessionModel> {
@@ -27,7 +27,7 @@ const Session: Model<SessionModel> = new Model({
       exposed: true,
     },
   }),
-  sequelize: db,
+  sequelize,
 });
 
 export default Session;

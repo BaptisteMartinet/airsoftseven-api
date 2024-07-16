@@ -2,7 +2,7 @@ import type { ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { DATE, Model, STRING, INTEGER } from '@sequelize-graphql/core';
-import db from '@db/index';
+import sequelize from '@db/index';
 import { User, Club, Field } from './index';
 
 /**
@@ -47,7 +47,7 @@ const Event: Model<EventModel> = new Model({
       exposed: true,
     },
   }),
-  sequelize: db,
+  sequelize,
 });
 
 export default Event;

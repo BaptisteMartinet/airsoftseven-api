@@ -1,7 +1,7 @@
 import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { DOUBLE, Model, STRING } from '@sequelize-graphql/core';
-import db from '@db/index';
+import sequelize from '@db/index';
 import { Event } from './index';
 
 export interface FieldModel extends InferModelAttributesWithDefaults<FieldModel> {
@@ -28,7 +28,7 @@ const Field: Model<FieldModel> = new Model({
       exposed: true,
     },
   }),
-  sequelize: db,
+  sequelize,
 });
 
 export default Field;

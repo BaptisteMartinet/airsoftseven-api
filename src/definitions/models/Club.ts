@@ -1,7 +1,7 @@
 import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
-import db from '@db/index';
+import sequelize from '@db/index';
 import { Event } from './index';
 
 /**
@@ -39,7 +39,7 @@ const Club: Model<ClubModel> = new Model({
       exposed: true,
     },
   }),
-  sequelize: db,
+  sequelize,
 });
 
 export default Club;
