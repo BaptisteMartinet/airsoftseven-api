@@ -1,18 +1,15 @@
 import type { CreationOptional } from 'sequelize';
-import type { IdType, InferModelAttributes } from '@sequelize-graphql/core';
+import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import db from '@db/index';
 import { Event, Session } from './index';
 
-export interface UserModel extends InferModelAttributes<UserModel> {
-  id: CreationOptional<IdType>;
+export interface UserModel extends InferModelAttributesWithDefaults<UserModel> {
   username: string;
   email: string;
   emailVerified: CreationOptional<boolean>;
   passwordHash: string;
-  createdAt: CreationOptional<Date>;
-  updatedAt: CreationOptional<Date>;
 }
 
 const User: Model<UserModel> = new Model({
