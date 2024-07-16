@@ -9,6 +9,7 @@ export interface SessionModel extends InferModelAttributesWithDefaults<SessionMo
   token: string;
   refreshToken: string;
   expireAt: Date;
+  closedAt: Date | null;
 
   userId: ForeignKey<IdType>;
 }
@@ -19,6 +20,7 @@ const Session: Model<SessionModel> = new Model({
     token: { type: STRING, allowNull: false, exposed: true },
     refreshToken: { type: STRING, allowNull: false, exposed: false },
     expireAt: { type: DATE, allowNull: false, exposed: true },
+    closedAt: { type: DATE, allowNull: true, exposed: false },
   },
   associations: () => ({
     user: {
