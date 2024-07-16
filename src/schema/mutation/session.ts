@@ -41,6 +41,7 @@ export default new GraphQLObjectType<unknown, Context>({
         const { token } = args;
         const userId = ensureEmailVerificationTokenPayload(token);
         const user = await User.ensureExistence(userId, { ctx });
+        if (user.emailVerified) throw new Error('Email already verified');
         await user.update({ emailVerified: true });
         return true;
       },
