@@ -1,5 +1,5 @@
-export { default as User } from './User';
-export { default as Session } from './Session';
-export { default as Club } from './Club';
-export { default as Field } from './Field';
-export { default as Event } from './Event';
+export { default as User, type UserModel } from './User';
+export { default as Session, type SessionModel } from './Session';
+export { default as Club, type ClubModel } from './Club';
+export { default as Field, type FieldModel } from './Field';
+export { default as Event, type EventModel } from './Event';
