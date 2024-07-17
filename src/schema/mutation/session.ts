@@ -22,9 +22,10 @@ export default new GraphQLObjectType<unknown, Context>({
         username: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: new GraphQLNonNull(GraphQLString) },
+        newsletterOptIn: { type: GraphQLBoolean },
       },
       async resolve(_, args, ctx) {
-        const { username, email, password } = args;
+        const { username, email, password, newsletterOptIn } = args;
         if (await User.exists({ where: { email } })) throw new Error('Email already taken'); // TODO custom error
         if (await User.exists({ where: { username } })) throw new Error('Username already taken'); // TODO custom error
         const passwordHash = hashPassword(password);
@@ -32,6 +33,7 @@ export default new GraphQLObjectType<unknown, Context>({
           username,
           email,
           passwordHash,
+          newsletterOptIn,
         });
         await onUserRegister(user.id, ctx);
         return true;

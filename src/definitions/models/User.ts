@@ -10,6 +10,7 @@ export interface UserModel extends InferModelAttributesWithDefaults<UserModel> {
   email: string;
   emailVerified: CreationOptional<boolean>;
   passwordHash: string;
+  newsletterOptIn: CreationOptional<boolean>;
 }
 
 const User: Model<UserModel> = new Model({
@@ -19,6 +20,7 @@ const User: Model<UserModel> = new Model({
     email: { type: STRING, allowNull: false, exposed: false },
     emailVerified: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: false },
     passwordHash: { type: STRING, allowNull: false, exposed: false },
+    newsletterOptIn: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: true },
   },
   indexes: [
     { fields: ['username'], unique: true },
