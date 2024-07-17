@@ -1,8 +1,10 @@
+import type { Context } from '@/context';
+
 import { GraphQLObjectType } from 'graphql';
 import { Session } from '@definitions/models';
 import { ensureSession } from '@/definitions/helpers/Session';
 
-export default new GraphQLObjectType({
+export default new GraphQLObjectType<unknown, Context>({
   name: 'Query',
   fields: () => ({
     session: {
