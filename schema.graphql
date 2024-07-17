@@ -1,5 +1,297 @@
 type Query {
-  helloWorld: String
+  session: Session
+  events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
 }
 
-type Mutation
+type Session {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  token: String!
+  expireAt: Date!
+  user: User
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type User {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  username: String!
+  newsletterOptIn: Boolean!
+  clubs(offset: Int, limit: Int, order: [ClubOrderBy!], filters: ClubFilters): ClubOffsetConnection!
+  fields(offset: Int, limit: Int, order: [FieldOrderBy!], filters: FieldFilters): FieldOffsetConnection!
+  events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+}
+
+type ClubOffsetConnection {
+  nodes: [Club!]
+  count: Int!
+}
+
+type Club {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  name: String!
+  description: String
+  publicUrl: String
+  rules: String
+  rental: Boolean
+  acceptUnderage: Boolean
+  user: User
+  events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+}
+
+type EventOffsetConnection {
+  nodes: [Event!]
+  count: Int!
+}
+
+type Event {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  title: String!
+  date: Date!
+  price: Int
+  publicUrl: String
+  user: User
+  club: Club
+  field: Field
+}
+
+type Field {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  name: String!
+  description: String
+  address: String!
+  latitude: Float!
+  longitude: Float!
+  user: User
+  events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+}
+
+input EventOrderBy {
+  field: EventFields!
+  ordering: OrderType!
+}
+
+enum EventFields {
+  title
+  date
+  price
+  publicUrl
+  createdAt
+  updatedAt
+}
+
+enum OrderType {
+  ASC
+  DESC
+}
+
+"""The Event model filters"""
+input EventFilters {
+  title: StringFilters
+  date: IntFilters
+  price: IntFilters
+  publicUrl: StringFilters
+}
+
+input StringFilters {
+  """Equal"""
+  eq: String
+
+  """Not equal"""
+  ne: String
+
+  """In"""
+  in: [String!]
+
+  """Not in"""
+  notIn: [String!]
+
+  """Contains substring"""
+  contains: String
+
+  """Starts with substring"""
+  startsWith: String
+
+  """Ends with substring"""
+  endsWith: String
+}
+
+input IntFilters {
+  """Equal"""
+  eq: Int
+
+  """Not equal"""
+  ne: Int
+
+  """In"""
+  in: [Int!]
+
+  """Not in"""
+  notIn: [Int!]
+
+  """Less than"""
+  lt: Int
+
+  """Less than or equal"""
+  lte: Int
+
+  """Greater than"""
+  gt: Int
+
+  """Greater than or equal"""
+  gte: Int
+}
+
+input ClubOrderBy {
+  field: ClubFields!
+  ordering: OrderType!
+}
+
+enum ClubFields {
+  name
+  description
+  publicUrl
+  rules
+  rental
+  acceptUnderage
+  createdAt
+  updatedAt
+}
+
+"""The Club model filters"""
+input ClubFilters {
+  name: StringFilters
+  description: StringFilters
+  publicUrl: StringFilters
+  rules: StringFilters
+  rental: BooleanFilters
+  acceptUnderage: BooleanFilters
+}
+
+input BooleanFilters {
+  """Equal"""
+  eq: Boolean
+
+  """Not equal"""
+  ne: Boolean
+
+  """In"""
+  in: [Boolean!]
+
+  """Not in"""
+  notIn: [Boolean!]
+}
+
+type FieldOffsetConnection {
+  nodes: [Field!]
+  count: Int!
+}
+
+input FieldOrderBy {
+  field: FieldFields!
+  ordering: OrderType!
+}
+
+enum FieldFields {
+  name
+  description
+  address
+  latitude
+  longitude
+  createdAt
+  updatedAt
+}
+
+"""The Field model filters"""
+input FieldFilters {
+  name: StringFilters
+  description: StringFilters
+  address: StringFilters
+  latitude: FloatFilters
+  longitude: FloatFilters
+}
+
+input FloatFilters {
+  """Equal"""
+  eq: Float
+
+  """Not equal"""
+  ne: Float
+
+  """In"""
+  in: [Float!]
+
+  """Not in"""
+  notIn: [Float!]
+
+  """Less than"""
+  lt: Float
+
+  """Less than or equal"""
+  lte: Float
+
+  """Greater than"""
+  gt: Float
+
+  """Greater than or equal"""
+  gte: Float
+}
+
+type Mutation {
+  session: SessionMutation!
+  authenticated: AuthenticatedMutation!
+}
+
+type SessionMutation {
+  register(username: String!, email: String!, password: String!, newsletterOptIn: Boolean): Boolean!
+  verifyAccount(token: String!): Boolean!
+  login(email: String!, password: String!): Session!
+  refresh: Session!
+  logout: Boolean!
+}
+
+type AuthenticatedMutation {
+  club: AuthenticatedClubMutation!
+  field: AuthenticatedFieldMutation!
+  event: AuthenticatedEventMutation!
+}
+
+type AuthenticatedClubMutation {
+  create(input: AuthenticatedClubCreateInput!): Club!
+}
+
+input AuthenticatedClubCreateInput {
+  name: String!
+}
+
+type AuthenticatedFieldMutation {
+  create(input: AuthenticatedFieldCreateInput!): Field!
+}
+
+input AuthenticatedFieldCreateInput {
+  name: String!
+  address: String!
+  latitude: Float!
+  longitude: Float!
+}
+
+type AuthenticatedEventMutation {
+  create(input: AuthenticatedEventCreateInput!): Event!
+}
+
+input AuthenticatedEventCreateInput {
+  title: String!
+  date: Date!
+  clubId: ID!
+  fieldId: ID!
+}
