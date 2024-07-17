@@ -6,22 +6,17 @@ import { SupportEmail } from '@constants/emails';
 import { makeRegisterSuccessUrl } from '@constants/links';
 import { User } from '@definitions/models';
 import { makeEmailVerificationToken } from '@definitions/helpers/Session';
-import render from '@notifications/emails/transactional/user-register';
-import texts from '@notifications/emails/transactional/user-register/texts';
+import genEmailDetails from '@notifications/emails/transactional/user-register';
 
 export default async function onUserRegister(userId: IdType, ctx: Context) {
   const user = await User.ensureExistence(userId);
   const { username, email } = user;
-  const subject = texts(ctx.language).subject;
   const verifyUrl = makeRegisterSuccessUrl(makeEmailVerificationToken(userId)).href;
+  const { subject, text } = genEmailDetails({ username, verifyUrl, ctx });
   await sgMail.send({
     from: SupportEmail,
     to: email,
-    subject: subject,
-    html: render({
-      username,
-      verifyUrl,
-      ctx,
-    }),
+    subject,
+    text,
   });
 }
