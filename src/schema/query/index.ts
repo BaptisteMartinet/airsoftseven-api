@@ -1,7 +1,8 @@
 import type { Context } from '@/context';
 
 import { GraphQLObjectType } from 'graphql';
-import { Session } from '@definitions/models';
+import { genModelOffsetPagination } from '@sequelize-graphql/core';
+import { Session, Event } from '@definitions/models';
 import { ensureSession } from '@/definitions/helpers/Session';
 
 export default new GraphQLObjectType<unknown, Context>({
@@ -17,5 +18,7 @@ export default new GraphQLObjectType<unknown, Context>({
         }
       },
     },
+
+    events: genModelOffsetPagination(Event),
   }),
 });
