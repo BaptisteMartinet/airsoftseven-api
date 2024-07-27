@@ -1,1 +1,1 @@
-export { default as onUserRegister } from './onUserRegister';
+export { default as onVerifyEmail } from './onVerifyEmail';

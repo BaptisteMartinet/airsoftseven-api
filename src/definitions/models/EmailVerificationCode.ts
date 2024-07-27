@@ -16,7 +16,6 @@ const EmailVerificationCode: Model<EmailVerificationCodeModel> = new Model({
     code: { type: STRING, allowNull: false, exposed: false },
     expireAt: { type: DATE, allowNull: false, exposed: false },
   },
-  indexes: [{ fields: ['email'], unique: true }],
   sequelize,
 });
 

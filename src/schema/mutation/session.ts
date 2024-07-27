@@ -5,52 +5,46 @@ import { addMonths, differenceInMilliseconds } from 'date-fns';
 import { hashPassword, comparePassword } from '@utils/password';
 import { signJWT } from '@utils/jwt';
 import { Session, User } from '@definitions/models';
-import {
-  ensureEmailVerificationTokenPayload,
-  createSession,
-  ensureSession,
-  ensureSessionFromToken,
-} from '@definitions/helpers/Session';
-import { onUserRegister } from '@notifications/dispatchers';
+import { createSession, ensureSession, ensureSessionFromToken } from '@definitions/helpers/Session';
+import { createVerificationCode, ensureVerificationCode } from '@definitions/helpers/EmailVerification';
+import { onVerifyEmail } from '@notifications/dispatchers';
 
 export default new GraphQLObjectType<unknown, Context>({
   name: 'SessionMutation',
   fields: () => ({
+    verifyEmail: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(_, args, ctx) {
+        const { email } = args;
+        const code = await createVerificationCode(email);
+        await onVerifyEmail({ email, code }, ctx);
+        return true;
+      },
+    },
     register: {
       type: new GraphQLNonNull(GraphQLBoolean),
       args: {
+        code: { type: new GraphQLNonNull(GraphQLString) },
         username: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) },
         password: { type: new GraphQLNonNull(GraphQLString) },
         newsletterOptIn: { type: GraphQLBoolean },
       },
       async resolve(_, args, ctx) {
-        const { username, email, password, newsletterOptIn } = args;
+        const { code, username, email, password, newsletterOptIn } = args;
+        await ensureVerificationCode(email, code);
         if (await User.exists({ where: { email } })) throw new Error('Email already taken'); // TODO custom error
         if (await User.exists({ where: { username } })) throw new Error('Username already taken'); // TODO custom error
         const passwordHash = hashPassword(password);
-        const user = await User.model.create({
+        await User.model.create({
           username,
           email,
           passwordHash,
           newsletterOptIn,
         });
-        await onUserRegister(user.id, ctx);
-        return true;
-      },
-    },
-
-    verifyAccount: {
-      type: new GraphQLNonNull(GraphQLBoolean),
-      args: {
-        token: { type: new GraphQLNonNull(GraphQLString) },
-      },
-      async resolve(_, args, ctx) {
-        const { token } = args;
-        const userId = ensureEmailVerificationTokenPayload(token);
-        const user = await User.ensureExistence(userId, { ctx });
-        if (user.emailVerified) throw new Error('Email already verified');
-        await user.update({ emailVerified: true });
         return true;
       },
     },
@@ -63,7 +57,7 @@ export default new GraphQLObjectType<unknown, Context>({
       },
       async resolve(_, args, ctx) {
         const { email, password } = args;
-        const user = await User.model.findOne({ where: { email, emailVerified: true } });
+        const user = await User.model.findOne({ where: { email } });
         const passwordMatch = comparePassword(password, user?.passwordHash ?? '') && user !== null;
         if (!passwordMatch) throw new Error('Email or password is invalid'); // TODO custom error
         const now = new Date();

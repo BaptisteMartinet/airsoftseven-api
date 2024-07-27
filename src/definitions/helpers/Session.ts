@@ -19,17 +19,6 @@ export async function createSession(userId: IdType, opts: { now: Date; expireAt:
   return session.update({ token, refreshToken });
 }
 
-export function makeEmailVerificationToken(userId: IdType) {
-  return signJWT({ userId, type: 'emailVerification' }, { expiresIn: '10m' });
-}
-
-export function ensureEmailVerificationTokenPayload(token: string) {
-  const payload = verifyJWT(token);
-  const { userId, type } = payload;
-  if (!userId || type !== 'emailVerification') throw new Error('Invalid verification payload');
-  return userId as IdType;
-}
-
 export async function ensureSessionFromToken(token: string) {
   const { sessionId } = verifyJWT(token);
   const session = await Session.ensureExistence(sessionId);

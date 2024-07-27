@@ -8,7 +8,6 @@ import { Club, Event, Field, Session } from './index';
 export interface UserModel extends InferModelAttributesWithDefaults<UserModel> {
   username: string;
   email: string;
-  emailVerified: CreationOptional<boolean>;
   passwordHash: string;
   newsletterOptIn: CreationOptional<boolean>;
 }
@@ -18,7 +17,6 @@ const User: Model<UserModel> = new Model({
   columns: {
     username: { type: STRING, allowNull: false, exposed: true },
     email: { type: STRING, allowNull: false, exposed: false },
-    emailVerified: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: false },
     passwordHash: { type: STRING, allowNull: false, exposed: false },
     newsletterOptIn: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: true },
   },
