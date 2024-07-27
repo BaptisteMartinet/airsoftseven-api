@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import { genRandomString } from '@utils/crypto';
 import { Hour } from '@utils/time';
 import { EmailVerificationCode } from '@definitions/models';
@@ -16,6 +17,6 @@ export async function createVerificationCode(email: string) {
 
 export async function ensureVerificationCode(email: string, code: string) {
   const now = new Date();
-  if (await EmailVerificationCode.exists({ where: { email, code, expireAt: { gt: now } } })) return true;
+  if (await EmailVerificationCode.exists({ where: { email, code, expireAt: { [Op.gt]: now } } })) return true;
   throw new Error(`Invalid verification code: ${code} for email: ${email}`);
 }
