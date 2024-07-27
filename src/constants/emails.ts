@@ -1,1 +1,1 @@
-export const SupportEmail = 'airsoftsevenapp@gmail.com';
+export const SupportEmail = 'support@airsoftseven.com';
