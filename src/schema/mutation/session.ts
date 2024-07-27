@@ -24,6 +24,7 @@ export default new GraphQLObjectType<unknown, Context>({
         return true;
       },
     },
+
     register: {
       type: new GraphQLNonNull(GraphQLBoolean),
       args: {
