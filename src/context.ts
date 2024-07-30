@@ -17,7 +17,8 @@ export default async function createContext(args: { req: Request; res: Response 
   const { req, res } = args;
   const contentLanguageHeader = req.headers['content-language'];
   const language = contentLanguageHeader ? strToLanguage(contentLanguageHeader) : DefaultLanguage;
-  const token = req.headers.authorization ?? null;
+  const authorization = req.headers.authorization;
+  const token = authorization && authorization.startsWith('Bearer ') ? authorization.slice(7) : null;
   return {
     ...makeContext(),
     req,
