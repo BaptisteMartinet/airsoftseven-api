@@ -1,6 +1,6 @@
 import type { Context } from '@/context';
 
-import { attachMemoizerArgsFormatter } from '@sequelize-graphql/core/src/utils/memoize'; // todo test import
+import { attachMemoizerArgsFormatter } from '@sequelize-graphql/core';
 import { Session, User } from '@definitions/models';
 
 export async function ensureSession(ctx: Context) {
