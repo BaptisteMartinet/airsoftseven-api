@@ -1,5 +1,5 @@
 import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
-import { genModelMutations, GraphlQLDate } from '@sequelize-graphql/core';
+import { genModelMutations, GraphQLDate } from '@sequelize-graphql/core';
 import { Club, Event, Field } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
@@ -8,7 +8,7 @@ export default genModelMutations(Event, {
   create: {
     args: {
       title: { type: new GraphQLNonNull(GraphQLString) },
-      date: { type: new GraphQLNonNull(GraphlQLDate) },
+      date: { type: new GraphQLNonNull(GraphQLDate) },
       clubId: { type: new GraphQLNonNull(GraphQLID) },
       fieldId: { type: new GraphQLNonNull(GraphQLID) },
     },
