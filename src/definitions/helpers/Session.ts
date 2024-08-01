@@ -8,10 +8,8 @@ export async function ensureSession(ctx: Context) {
   if (!sessionId) throw new Error('Missing session');
   const session = await Session.ensureExistence(sessionId, { ctx });
   const now = new Date();
-  if (session.expireAt < now)
-    throw new Error('Session is expired'); // todo error
-  if (session.closedAt)
-    throw new Error('Session is closed'); // todo error
+  if (session.expireAt < now) throw new Error('Session is expired'); // todo error
+  if (session.closedAt) throw new Error('Session is closed'); // todo error
   return session;
 }
 
