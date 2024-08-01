@@ -1,11 +1,12 @@
 import type { Context } from '@/context';
 
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { addMonths, differenceInMilliseconds } from 'date-fns';
+import { differenceInMilliseconds } from 'date-fns';
 import { hashPassword, comparePassword } from '@utils/password';
-import { signJWT } from '@utils/jwt';
+import { Day } from '@utils/time';
+import { PROD, DOMAIN } from '@constants/env';
 import { Session, User } from '@definitions/models';
-import { createSession, ensureSession, ensureSessionFromToken } from '@definitions/helpers/Session';
+import { ensureSession } from '@definitions/helpers/Session';
 import { createVerificationCode, ensureVerificationCode } from '@definitions/helpers/EmailVerification';
 import { onVerifyEmail } from '@notifications/dispatchers';
 
@@ -61,30 +62,24 @@ export default new GraphQLObjectType<unknown, Context>({
         const user = await User.model.findOne({ where: { email } });
         const passwordMatch = comparePassword(password, user?.passwordHash ?? '') && user !== null;
         if (!passwordMatch) throw new Error('Email or password is invalid'); // TODO custom error
+
         const now = new Date();
-        const expireAt = addMonths(now, 3);
-        const session = await createSession(user.id, { now, expireAt });
+        const expireAt = new Date(now.getTime() + Day * 30);
+        const session = await Session.model.create({
+          userId: user.id,
+          expireAt,
+        });
         const maxAge = differenceInMilliseconds(expireAt, now);
-        ctx.res.cookie('refreshToken', session.refreshToken, {
+        ctx.res.cookie('session', session.id, {
           maxAge,
           httpOnly: true,
-          secure: true,
-          sameSite: 'none',
+          secure: PROD,
+          signed: true,
+          sameSite: 'lax',
+          path: '/',
+          domain: PROD ? `.${DOMAIN}` : '',
         });
         return session;
-      },
-    },
-
-    refresh: {
-      type: new GraphQLNonNull(Session.type),
-      async resolve(_, args, ctx) {
-        const { token } = ctx;
-        const { refreshToken } = ctx.req.cookies;
-        if (!token || !refreshToken) throw new Error('Unable to refresh session');
-        const session = await ensureSessionFromToken(refreshToken);
-        if (session.token !== token || session.refreshToken !== refreshToken) throw new Error('Tokens do not match');
-        const newToken = signJWT({ sessionId: session.id }, { expiresIn: '5m' });
-        return session.update({ token: newToken });
       },
     },
 
@@ -92,7 +87,9 @@ export default new GraphQLObjectType<unknown, Context>({
       type: new GraphQLNonNull(GraphQLBoolean),
       async resolve(_, args, ctx) {
         const session = await ensureSession(ctx);
+        if (session.closedAt) throw new Error('Session is already closed'); // TODO error
         await session.update({ closedAt: new Date() });
+        ctx.res.clearCookie('session');
         return true;
       },
     },

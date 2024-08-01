@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import type { Context as ContextBase } from '@sequelize-graphql/core';
+import type { Context as ContextBase, IdType } from '@sequelize-graphql/core';
 import type { Language } from '@definitions/enums';
 
 import { makeContext } from '@sequelize-graphql/core';
@@ -10,20 +10,19 @@ export interface Context extends ContextBase {
   req: Request;
   res: Response;
   language: Language;
-  token: string | null;
+  sessionId: IdType | null;
 }
 
 export default async function createContext(args: { req: Request; res: Response }): Promise<Context> {
   const { req, res } = args;
   const contentLanguageHeader = req.headers['content-language'];
   const language = contentLanguageHeader ? strToLanguage(contentLanguageHeader) : DefaultLanguage;
-  const authorization = req.headers.authorization;
-  const token = authorization && authorization.startsWith('Bearer ') ? authorization.slice(7) : null;
+  const sessionId = req.signedCookies.session;
   return {
     ...makeContext(),
     req,
     res,
     language,
-    token,
+    sessionId,
   };
 }

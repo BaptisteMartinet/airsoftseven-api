@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { PORT } from '@constants/env';
+import { PORT, COOKIES_SECRET_KEY } from '@constants/env';
 import db from './db';
 import context from './context';
 import schema from './schema';
@@ -30,7 +30,7 @@ async function main() {
       credentials: true,
     }),
     express.json({ limit: '50mb' }),
-    cookieParser(),
+    cookieParser(COOKIES_SECRET_KEY),
     expressMiddleware(server, {
       context,
     }),
