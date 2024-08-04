@@ -7,6 +7,7 @@ export const SENDGRID_API_KEY = ensureEnvString('SENDGRID_API_KEY');
 export const PORT = ensureEnvInt('PORT');
 
 export const DOMAIN = ensureEnvString('DOMAIN');
+export const DOMAIN_FULL = `https://${DOMAIN}`;
 
 export const ENV = ensureEnvString('NODE_ENV');
 export const PROD = ENV === 'production';
