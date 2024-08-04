@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { PORT, COOKIES_SECRET_KEY } from '@constants/env';
+import { PORT, COOKIES_SECRET_KEY, PROD, DOMAIN_FULL } from '@constants/env';
 import db from './db';
 import context from './context';
 import schema from './schema';
@@ -26,7 +26,7 @@ async function main() {
   app.use(
     '/',
     cors<cors.CorsRequest>({
-      origin: true, // TODO airsfoturl,
+      origin: PROD ? DOMAIN_FULL : true,
       credentials: true,
     }),
     express.json({ limit: '50mb' }),
