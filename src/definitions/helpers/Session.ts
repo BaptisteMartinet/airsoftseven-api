@@ -2,14 +2,15 @@ import type { Context } from '@/context';
 
 import { attachMemoizerArgsFormatter } from '@sequelize-graphql/core';
 import { Session, User } from '@definitions/models';
+import { AuthRequired } from '@utils/errors';
 
 export async function ensureSession(ctx: Context) {
   const { sessionId } = ctx;
-  if (!sessionId) throw new Error('Missing session');
+  if (!sessionId) throw new AuthRequired('Missing session cookie');
   const session = await Session.ensureExistence(sessionId, { ctx });
   const now = new Date();
-  if (session.expireAt < now) throw new Error('Session is expired'); // todo error
-  if (session.closedAt) throw new Error('Session is closed'); // todo error
+  if (session.expireAt < now) throw new AuthRequired('Session expired');
+  if (session.closedAt) throw new AuthRequired('Session closed');
   return session;
 }
 

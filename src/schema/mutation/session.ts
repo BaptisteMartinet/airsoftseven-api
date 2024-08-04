@@ -87,7 +87,6 @@ export default new GraphQLObjectType<unknown, Context>({
       type: new GraphQLNonNull(GraphQLBoolean),
       async resolve(_, args, ctx) {
         const session = await ensureSession(ctx);
-        if (session.closedAt) throw new Error('Session is already closed'); // TODO error
         await session.update({ closedAt: new Date() });
         ctx.res.clearCookie('session');
         return true;
