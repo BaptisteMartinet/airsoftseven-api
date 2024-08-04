@@ -1,13 +1,17 @@
 type Query {
   session: Session
+  event(id: ID!): Event!
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+  club(id: ID!): Club!
+  clubs(offset: Int, limit: Int, order: [ClubOrderBy!], filters: ClubFilters): ClubOffsetConnection!
+  field(id: ID!): Field!
+  fields(offset: Int, limit: Int, order: [FieldOrderBy!], filters: FieldFilters): FieldOffsetConnection!
 }
 
 type Session {
   id: ID!
   createdAt: Date!
   updatedAt: Date!
-  token: String!
   expireAt: Date!
   user: User
 }
@@ -55,8 +59,11 @@ type Event {
   createdAt: Date!
   updatedAt: Date!
   title: String!
-  date: Date!
-  price: Int
+  description: String
+  startDate: Date!
+  endDate: Date
+  price: Float
+  capacity: Int
   publicUrl: String
   user: User
   club: Club
@@ -83,8 +90,11 @@ input EventOrderBy {
 
 enum EventFields {
   title
-  date
+  description
+  startDate
+  endDate
   price
+  capacity
   publicUrl
   createdAt
   updatedAt
@@ -98,8 +108,11 @@ enum OrderType {
 """The Event model filters"""
 input EventFilters {
   title: StringFilters
-  date: IntFilters
-  price: IntFilters
+  description: StringFilters
+  startDate: IntFilters
+  endDate: IntFilters
+  price: FloatFilters
+  capacity: IntFilters
   publicUrl: StringFilters
 }
 
@@ -150,6 +163,32 @@ input IntFilters {
 
   """Greater than or equal"""
   gte: Int
+}
+
+input FloatFilters {
+  """Equal"""
+  eq: Float
+
+  """Not equal"""
+  ne: Float
+
+  """In"""
+  in: [Float!]
+
+  """Not in"""
+  notIn: [Float!]
+
+  """Less than"""
+  lt: Float
+
+  """Less than or equal"""
+  lte: Float
+
+  """Greater than"""
+  gt: Float
+
+  """Greater than or equal"""
+  gte: Float
 }
 
 input ClubOrderBy {
@@ -221,42 +260,15 @@ input FieldFilters {
   longitude: FloatFilters
 }
 
-input FloatFilters {
-  """Equal"""
-  eq: Float
-
-  """Not equal"""
-  ne: Float
-
-  """In"""
-  in: [Float!]
-
-  """Not in"""
-  notIn: [Float!]
-
-  """Less than"""
-  lt: Float
-
-  """Less than or equal"""
-  lte: Float
-
-  """Greater than"""
-  gt: Float
-
-  """Greater than or equal"""
-  gte: Float
-}
-
 type Mutation {
   session: SessionMutation!
   authenticated: AuthenticatedMutation!
 }
 
 type SessionMutation {
-  register(username: String!, email: String!, password: String!, newsletterOptIn: Boolean): Boolean!
-  verifyAccount(token: String!): Boolean!
+  verifyEmail(email: String!): Boolean!
+  register(code: String!, username: String!, email: String!, password: String!, newsletterOptIn: Boolean): Boolean!
   login(email: String!, password: String!): Session!
-  refresh: Session!
   logout: Boolean!
 }
 
@@ -291,7 +303,11 @@ type AuthenticatedEventMutation {
 
 input AuthenticatedEventCreateInput {
   title: String!
-  date: Date!
+  description: String
+  startDate: Date!
+  endDate: Date
+  price: Float
+  capacity: Int
   clubId: ID!
   fieldId: ID!
 }
