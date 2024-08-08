@@ -1,9 +1,9 @@
 import type { ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { DATE, Model, STRING, FLOAT, INTEGER } from '@sequelize-graphql/core';
+import { Model, STRING, FLOAT, INTEGER } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { User, Club, Field } from './index';
+import { EventDate, User, Club, Field } from './index';
 
 /**
  * TODO
@@ -14,8 +14,7 @@ import { User, Club, Field } from './index';
 export interface EventModel extends InferModelAttributesWithDefaults<EventModel> {
   title: string;
   description: string | null;
-  startDate: Date;
-  endDate: Date | null;
+  durationDays: number;
   price: number | null;
   capacity: number | null;
   publicUrl: string | null;
@@ -30,13 +29,18 @@ const Event: Model<EventModel> = new Model({
   columns: {
     title: { type: STRING, allowNull: false, exposed: true },
     description: { type: STRING, allowNull: true, exposed: true },
-    startDate: { type: DATE, allowNull: false, exposed: true },
-    endDate: { type: DATE, allowNull: true, exposed: true },
+    durationDays: { type: INTEGER, allowNull: false, defaultValue: 1, exposed: true },
     price: { type: FLOAT, allowNull: true, exposed: true },
     capacity: { type: INTEGER, allowNull: true, exposed: true },
     publicUrl: { type: STRING, allowNull: true, exposed: true },
   },
   associations: () => ({
+    dates: {
+      model: EventDate,
+      type: 'hasMany',
+      exposed: true,
+      deleteCascade: true,
+    },
     user: {
       model: User,
       type: 'belongsTo',
