@@ -1,7 +1,7 @@
 import type { ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { Model, STRING, FLOAT, INTEGER } from '@sequelize-graphql/core';
+import { Model, STRING, FLOAT, INTEGER, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { EventDate, User, Club, Field } from './index';
 
@@ -17,7 +17,7 @@ export interface EventModel extends InferModelAttributesWithDefaults<EventModel>
   durationDays: number;
   price: number | null;
   capacity: number | null;
-  publicUrl: string | null;
+  publicURL: string | null;
 
   userId: ForeignKey<IdType>;
   clubId: ForeignKey<IdType>;
@@ -28,11 +28,11 @@ const Event: Model<EventModel> = new Model({
   name: 'Event',
   columns: {
     title: { type: STRING, allowNull: false, exposed: true },
-    description: { type: STRING, allowNull: true, exposed: true },
+    description: { type: TEXT, allowNull: true, exposed: true },
     durationDays: { type: INTEGER, allowNull: false, defaultValue: 1, exposed: true },
     price: { type: FLOAT, allowNull: true, exposed: true },
     capacity: { type: INTEGER, allowNull: true, exposed: true },
-    publicUrl: { type: STRING, allowNull: true, exposed: true },
+    publicURL: { type: STRING, allowNull: true, exposed: true },
   },
   associations: () => ({
     dates: {

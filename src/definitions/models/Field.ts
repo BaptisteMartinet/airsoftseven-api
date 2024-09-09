@@ -1,7 +1,7 @@
 import type { ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { DOUBLE, Model, STRING } from '@sequelize-graphql/core';
+import { DOUBLE, Model, STRING, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Event, User } from './index';
 
@@ -11,6 +11,7 @@ export interface FieldModel extends InferModelAttributesWithDefaults<FieldModel>
   address: string;
   latitude: string;
   longitude: string;
+  publicURL: string;
 
   userId: ForeignKey<IdType>;
 }
@@ -19,10 +20,11 @@ const Field: Model<FieldModel> = new Model({
   name: 'Field',
   columns: {
     name: { type: STRING, allowNull: false, exposed: true },
-    description: { type: STRING, allowNull: true, exposed: true },
+    description: { type: TEXT, allowNull: true, exposed: true },
     address: { type: STRING, allowNull: false, exposed: true },
     latitude: { type: DOUBLE, allowNull: false, exposed: true },
     longitude: { type: DOUBLE, allowNull: false, exposed: true },
+    publicURL: { type: STRING, allowNull: true, exposed: true },
   },
   associations: () => ({
     user: {
