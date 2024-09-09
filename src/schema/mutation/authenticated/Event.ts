@@ -1,6 +1,6 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, GraphQLDate, GraphQLNonNullList } from '@sequelize-graphql/core';
-import { Event, EventDate, Club, Field } from '@definitions/models';
+import { Event, Club, Field } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
 export default genModelMutations(Event, {
@@ -9,7 +9,7 @@ export default genModelMutations(Event, {
     args: {
       title: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: GraphQLString },
-      dates: { type: new GraphQLNonNull(new GraphQLNonNullList(GraphQLDate)) },
+      date: { type: new GraphQLNonNull(GraphQLDate) },
       durationDays: { type: GraphQLInt },
       price: { type: GraphQLFloat },
       capacity: { type: GraphQLInt },
@@ -25,12 +25,6 @@ export default genModelMutations(Event, {
         ...fields,
         userId: user.id,
       });
-      await EventDate.model.bulkCreate(
-        dates.map((date: any) => ({
-          date: date.getTime(),
-          eventId: event.id,
-        })),
-      );
       return event;
     },
   },
