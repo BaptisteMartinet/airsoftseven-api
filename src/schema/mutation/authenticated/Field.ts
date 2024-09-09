@@ -8,14 +8,16 @@ export default genModelMutations(Field, {
   create: {
     args: {
       name: { type: new GraphQLNonNull(GraphQLString) },
+      description: { type: GraphQLString },
       address: { type: new GraphQLNonNull(GraphQLString) },
       latitude: { type: new GraphQLNonNull(GraphQLFloat) },
       longitude: { type: new GraphQLNonNull(GraphQLFloat) },
+      publicURL: { type: GraphQLString },
     },
     async resolve(_, args, ctx) {
-      const { name, address, latitude, longitude } = args;
+      const fields = args;
       const user = await ensureSessionUser(ctx);
-      return Field.model.create({ name, address, latitude, longitude, userId: user.id });
+      return Field.model.create({ ...fields, userId: user.id });
     },
   },
 });

@@ -9,9 +9,9 @@ export default genModelMutations(Club, {
     args: {
       name: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: GraphQLString },
-      publicUrl: { type: GraphQLString },
+      publicURL: { type: GraphQLString },
       rules: { type: GraphQLString },
-      rental: { type: GraphQLBoolean },
+      rentals: { type: GraphQLBoolean },
       acceptUnderage: { type: GraphQLBoolean },
     },
     async resolve(_, args, ctx) {

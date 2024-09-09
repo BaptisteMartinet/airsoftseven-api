@@ -1,5 +1,5 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
-import { genModelMutations, GraphQLDate, GraphQLNonNullList } from '@sequelize-graphql/core';
+import { genModelMutations, GraphQLDate } from '@sequelize-graphql/core';
 import { Event, Club, Field } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
@@ -13,6 +13,7 @@ export default genModelMutations(Event, {
       durationDays: { type: GraphQLInt },
       price: { type: GraphQLFloat },
       capacity: { type: GraphQLInt },
+      publicURL: { type: GraphQLString },
       clubId: { type: new GraphQLNonNull(GraphQLID) },
       fieldId: { type: new GraphQLNonNull(GraphQLID) },
     },
