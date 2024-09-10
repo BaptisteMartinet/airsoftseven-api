@@ -9,5 +9,5 @@ export interface SlugColumnsT {
 
 export const SlugColumns = {
   slugBase: { type: STRING, allowNull: false, exposed: true },
-  slug: { type: STRING, allowNull: false, exposed: true },
+  slug: { type: STRING, allowNull: false, exposed: true, unique: true },
 } as const satisfies Record<string, ColumnDefinition>;
