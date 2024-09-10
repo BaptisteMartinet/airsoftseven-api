@@ -18,7 +18,7 @@ export default genModelMutations(Event, {
       fieldId: { type: new GraphQLNonNull(GraphQLID) },
     },
     async resolve(_, args, ctx) {
-      const { dates, ...fields } = args;
+      const fields = args;
       const { clubId, fieldId } = fields;
       const user = await ensureSessionUser(ctx);
       await Promise.all([Club.ensureExistence(clubId, { ctx }), Field.ensureExistence(fieldId, { ctx })]);
