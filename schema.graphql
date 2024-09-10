@@ -41,9 +41,9 @@ type Club {
   updatedAt: Date!
   name: String!
   description: String
-  publicUrl: String
+  publicURL: String
   rules: String
-  rental: Boolean
+  rentals: Boolean
   acceptUnderage: Boolean
   user: User
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
@@ -60,11 +60,13 @@ type Event {
   updatedAt: Date!
   title: String!
   description: String
-  startDate: Date!
-  endDate: Date
+  date: Date!
+  durationDays: Int!
   price: Float
   capacity: Int
-  publicUrl: String
+  publicURL: String
+  slugBase: String!
+  slug: String!
   user: User
   club: Club
   field: Field
@@ -79,6 +81,7 @@ type Field {
   address: String!
   latitude: Float!
   longitude: Float!
+  publicURL: String
   user: User
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
 }
@@ -91,11 +94,13 @@ input EventOrderBy {
 enum EventFields {
   title
   description
-  startDate
-  endDate
+  date
+  durationDays
   price
   capacity
-  publicUrl
+  publicURL
+  slugBase
+  slug
   createdAt
   updatedAt
 }
@@ -109,11 +114,13 @@ enum OrderType {
 input EventFilters {
   title: StringFilters
   description: StringFilters
-  startDate: IntFilters
-  endDate: IntFilters
+  date: IntFilters
+  durationDays: IntFilters
   price: FloatFilters
   capacity: IntFilters
-  publicUrl: StringFilters
+  publicURL: StringFilters
+  slugBase: StringFilters
+  slug: StringFilters
 }
 
 input StringFilters {
@@ -199,9 +206,9 @@ input ClubOrderBy {
 enum ClubFields {
   name
   description
-  publicUrl
+  publicURL
   rules
-  rental
+  rentals
   acceptUnderage
   createdAt
   updatedAt
@@ -211,9 +218,9 @@ enum ClubFields {
 input ClubFilters {
   name: StringFilters
   description: StringFilters
-  publicUrl: StringFilters
+  publicURL: StringFilters
   rules: StringFilters
-  rental: BooleanFilters
+  rentals: BooleanFilters
   acceptUnderage: BooleanFilters
 }
 
@@ -247,6 +254,7 @@ enum FieldFields {
   address
   latitude
   longitude
+  publicURL
   createdAt
   updatedAt
 }
@@ -258,6 +266,7 @@ input FieldFilters {
   address: StringFilters
   latitude: FloatFilters
   longitude: FloatFilters
+  publicURL: StringFilters
 }
 
 type Mutation {
@@ -284,6 +293,11 @@ type AuthenticatedClubMutation {
 
 input AuthenticatedClubCreateInput {
   name: String!
+  description: String
+  publicURL: String
+  rules: String
+  rentals: Boolean
+  acceptUnderage: Boolean
 }
 
 type AuthenticatedFieldMutation {
@@ -292,9 +306,11 @@ type AuthenticatedFieldMutation {
 
 input AuthenticatedFieldCreateInput {
   name: String!
+  description: String
   address: String!
   latitude: Float!
   longitude: Float!
+  publicURL: String
 }
 
 type AuthenticatedEventMutation {
@@ -304,10 +320,11 @@ type AuthenticatedEventMutation {
 input AuthenticatedEventCreateInput {
   title: String!
   description: String
-  startDate: Date!
-  endDate: Date
+  date: Date!
+  durationDays: Int
   price: Float
   capacity: Int
+  publicURL: String
   clubId: ID!
   fieldId: ID!
 }
