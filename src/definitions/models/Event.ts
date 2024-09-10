@@ -4,6 +4,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 import { Model, DATE, STRING, FLOAT, INTEGER, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { User, Club, Field } from './index';
+import { SlugColumns, type SlugColumnsT } from './shared';
 
 /**
  * TODO
@@ -11,7 +12,7 @@ import { User, Club, Field } from './index';
  * - Horaires
  */
 
-export interface EventModel extends InferModelAttributesWithDefaults<EventModel> {
+export interface EventModel extends SlugColumnsT, InferModelAttributesWithDefaults<EventModel> {
   title: string;
   description: string | null;
   date: Date;
@@ -35,6 +36,8 @@ const Event: Model<EventModel> = new Model({
     price: { type: FLOAT, allowNull: true, exposed: true },
     capacity: { type: INTEGER, allowNull: true, exposed: true },
     publicURL: { type: STRING, allowNull: true, exposed: true },
+
+    ...SlugColumns,
   },
   associations: () => ({
     user: {
