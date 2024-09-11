@@ -4,7 +4,7 @@ import type { Context } from '@/context';
 import { GraphQLFieldConfig, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { exposeModel } from '@sequelize-graphql/core';
 import { ResourceDoesNotExist } from '@/utils/errors';
-import { Session, Event, Club, Field } from '@definitions/models';
+import { Session, Event, Club, Field, User } from '@definitions/models';
 import { ensureSession } from '@/definitions/helpers/Session';
 
 function makeFindBySlugField(model: Model<any>) {
@@ -59,5 +59,7 @@ export default new GraphQLObjectType<unknown, Context>({
     }),
 
     field: makeFindBySlugField(Field),
+
+    user: makeFindBySlugField(User),
   }),
 });
