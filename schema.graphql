@@ -25,6 +25,8 @@ type User {
   updatedAt: Date!
   username: String!
   newsletterOptIn: Boolean!
+  slugBase: String!
+  slug: String!
   clubs(offset: Int, limit: Int, order: [ClubOrderBy!], filters: ClubFilters): ClubOffsetConnection!
   fields(offset: Int, limit: Int, order: [FieldOrderBy!], filters: FieldFilters): FieldOffsetConnection!
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
@@ -45,6 +47,8 @@ type Club {
   rules: String
   rentals: Boolean
   acceptUnderage: Boolean
+  slugBase: String!
+  slug: String!
   user: User
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
 }
@@ -82,6 +86,8 @@ type Field {
   latitude: Float!
   longitude: Float!
   publicURL: String
+  slugBase: String!
+  slug: String!
   user: User
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
 }
@@ -210,6 +216,8 @@ enum ClubFields {
   rules
   rentals
   acceptUnderage
+  slugBase
+  slug
   createdAt
   updatedAt
 }
@@ -222,6 +230,8 @@ input ClubFilters {
   rules: StringFilters
   rentals: BooleanFilters
   acceptUnderage: BooleanFilters
+  slugBase: StringFilters
+  slug: StringFilters
 }
 
 input BooleanFilters {
@@ -255,6 +265,8 @@ enum FieldFields {
   latitude
   longitude
   publicURL
+  slugBase
+  slug
   createdAt
   updatedAt
 }
@@ -267,6 +279,8 @@ input FieldFilters {
   latitude: FloatFilters
   longitude: FloatFilters
   publicURL: StringFilters
+  slugBase: StringFilters
+  slug: StringFilters
 }
 
 type Mutation {
