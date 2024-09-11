@@ -12,3 +12,9 @@ export class AuthRequired extends ClientError {
     super('AuthRequired', message);
   }
 }
+
+export class ResourceDoesNotExist extends ClientError {
+  constructor(modelName: string, identifier: string) {
+    super('ResourceDoesNotExist', `${modelName}#${identifier} does not exist.`);
+  }
+}
