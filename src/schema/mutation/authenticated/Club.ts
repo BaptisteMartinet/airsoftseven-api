@@ -1,5 +1,5 @@
 import { GraphQLBoolean, GraphQLNonNull, GraphQLString } from 'graphql';
-import { genModelMutations } from '@sequelize-graphql/core';
+import { genModelMutations, genSlug } from '@sequelize-graphql/core';
 import { Club } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
@@ -16,8 +16,13 @@ export default genModelMutations(Club, {
     },
     async resolve(_, args, ctx) {
       const fields = args;
+      const { name } = fields;
       const user = await ensureSessionUser(ctx);
-      return Club.model.create({ ...fields, userId: user.id });
+      return Club.model.create({
+        ...fields,
+        userId: user.id,
+        ...(await genSlug(name, Club)),
+      });
     },
   },
 });

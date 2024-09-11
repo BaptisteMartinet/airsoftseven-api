@@ -4,6 +4,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 import { Model, STRING, BOOLEAN, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Event, User } from './index';
+import { SlugColumns, type SlugColumnsT } from './shared';
 
 /**
  * TODO Gerer les points suivants
@@ -14,7 +15,7 @@ import { Event, User } from './index';
  * - Type d'assurance
  */
 
-export interface ClubModel extends InferModelAttributesWithDefaults<ClubModel> {
+export interface ClubModel extends SlugColumnsT, InferModelAttributesWithDefaults<ClubModel> {
   name: string;
   description: string | null;
   publicURL: string | null;
@@ -34,6 +35,8 @@ const Club: Model<ClubModel> = new Model({
     rules: { type: TEXT, allowNull: true, exposed: true },
     rentals: { type: BOOLEAN, allowNull: true, exposed: true },
     acceptUnderage: { type: BOOLEAN, allowNull: true, exposed: true },
+
+    ...SlugColumns,
   },
   associations: () => ({
     user: {

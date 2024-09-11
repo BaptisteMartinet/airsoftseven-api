@@ -4,8 +4,9 @@ import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Club, Event, Field, Session } from './index';
+import { SlugColumns, type SlugColumnsT } from './shared';
 
-export interface UserModel extends InferModelAttributesWithDefaults<UserModel> {
+export interface UserModel extends SlugColumnsT, InferModelAttributesWithDefaults<UserModel> {
   username: string;
   email: string;
   passwordHash: string;
@@ -19,6 +20,8 @@ const User: Model<UserModel> = new Model({
     email: { type: STRING, allowNull: false, exposed: false },
     passwordHash: { type: STRING, allowNull: false, exposed: false },
     newsletterOptIn: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: true },
+
+    ...SlugColumns,
   },
   indexes: [
     { fields: ['username'], unique: true },

@@ -4,8 +4,9 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 import { DOUBLE, Model, STRING, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Event, User } from './index';
+import { SlugColumns, type SlugColumnsT } from './shared';
 
-export interface FieldModel extends InferModelAttributesWithDefaults<FieldModel> {
+export interface FieldModel extends SlugColumnsT, InferModelAttributesWithDefaults<FieldModel> {
   name: string;
   description: string | null;
   address: string;
@@ -25,6 +26,8 @@ const Field: Model<FieldModel> = new Model({
     latitude: { type: DOUBLE, allowNull: false, exposed: true },
     longitude: { type: DOUBLE, allowNull: false, exposed: true },
     publicURL: { type: STRING, allowNull: true, exposed: true },
+
+    ...SlugColumns,
   },
   associations: () => ({
     user: {

@@ -2,6 +2,7 @@ import type { Context } from '@/context';
 
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { differenceInMilliseconds } from 'date-fns';
+import { genSlug } from '@sequelize-graphql/core';
 import { hashPassword, comparePassword } from '@utils/password';
 import { Day } from '@utils/time';
 import { PROD, DOMAIN } from '@constants/env';
@@ -46,6 +47,7 @@ export default new GraphQLObjectType<unknown, Context>({
           email,
           passwordHash,
           newsletterOptIn,
+          ...(await genSlug(username, User)),
         });
         return true;
       },
