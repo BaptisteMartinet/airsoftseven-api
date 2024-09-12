@@ -1,7 +1,24 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, GraphQLDate, genSlug } from '@sequelize-graphql/core';
+import { format } from 'date-fns';
 import { Event, Club, Field } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
+
+async function genEventSlug({
+  eventTitle,
+  clubName,
+  fieldName,
+  date,
+}: {
+  eventTitle: string;
+  clubName: string;
+  fieldName: string;
+  date: Date;
+}) {
+  const formattedDate = format(date, 'dd-MM-yy');
+  const slugBase = [eventTitle, clubName, fieldName, formattedDate].join('-');
+  return genSlug(slugBase, Event);
+}
 
 export default genModelMutations(Event, {
   prefix: 'Authenticated',
@@ -19,13 +36,21 @@ export default genModelMutations(Event, {
     },
     async resolve(_, args, ctx) {
       const fields = args;
-      const { title, clubId, fieldId } = fields;
+      const { title, date, clubId, fieldId } = fields;
       const user = await ensureSessionUser(ctx);
-      await Promise.all([Club.ensureExistence(clubId, { ctx }), Field.ensureExistence(fieldId, { ctx })]);
+      const [club, field] = await Promise.all([
+        Club.ensureExistence(clubId, { ctx }),
+        Field.ensureExistence(fieldId, { ctx }),
+      ]);
       const event = await Event.model.create({
         ...fields,
         userId: user.id,
-        ...(await genSlug(title, Event)),
+        ...(await genEventSlug({
+          eventTitle: title,
+          clubName: club.name,
+          fieldName: field.name,
+          date,
+        })),
       });
       return event;
     },
