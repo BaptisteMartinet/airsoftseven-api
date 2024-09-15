@@ -23,10 +23,7 @@ const User: Model<UserModel> = new Model({
 
     ...SlugColumns,
   },
-  indexes: [
-    { fields: ['username'], unique: true },
-    { fields: ['email'], unique: true },
-  ],
+  indexes: [{ fields: ['email'], unique: true }],
   associations: () => ({
     sessions: {
       model: Session,

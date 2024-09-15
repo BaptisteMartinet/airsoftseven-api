@@ -40,7 +40,6 @@ export default new GraphQLObjectType<unknown, Context>({
         const { code, username, email, password, newsletterOptIn } = args;
         await ensureVerificationCode(email, code);
         if (await User.exists({ where: { email } })) throw new Error('Email already taken'); // TODO custom error
-        if (await User.exists({ where: { username } })) throw new Error('Username already taken'); // TODO custom error
         const passwordHash = hashPassword(password);
         await User.model.create({
           username,
