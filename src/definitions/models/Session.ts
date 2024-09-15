@@ -8,6 +8,7 @@ import { User } from './index';
 export interface SessionModel extends InferModelAttributesWithDefaults<SessionModel> {
   expireAt: Date;
   closedAt: Date | null;
+  usedAt: Date;
 
   userId: ForeignKey<IdType>;
 }
@@ -17,6 +18,7 @@ const Session: Model<SessionModel> = new Model({
   columns: {
     expireAt: { type: DATE, allowNull: false, exposed: true },
     closedAt: { type: DATE, allowNull: true, exposed: false },
+    usedAt: { type: DATE, allowNull: false, exposed: false },
   },
   associations: () => ({
     user: {
