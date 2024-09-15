@@ -1,11 +1,12 @@
 type Query {
   session: Session
-  event(id: ID!): Event!
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
-  club(id: ID!): Club!
+  event(slug: String!): Event!
   clubs(offset: Int, limit: Int, order: [ClubOrderBy!], filters: ClubFilters): ClubOffsetConnection!
-  field(id: ID!): Field!
+  club(slug: String!): Club!
   fields(offset: Int, limit: Int, order: [FieldOrderBy!], filters: FieldFilters): FieldOffsetConnection!
+  field(slug: String!): Field!
+  user(slug: String!): User!
 }
 
 type Session {
