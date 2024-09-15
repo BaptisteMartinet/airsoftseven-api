@@ -1,6 +1,5 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, GraphQLDate, genSlug } from '@sequelize-graphql/core';
-import { format } from 'date-fns';
 import { Event, Club, Field } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
@@ -8,15 +7,12 @@ async function genEventSlug({
   eventTitle,
   clubName,
   fieldName,
-  date,
 }: {
   eventTitle: string;
   clubName: string;
   fieldName: string;
-  date: Date;
 }) {
-  const formattedDate = format(date, 'dd-MM-yy');
-  const slugBase = [eventTitle, clubName, fieldName, formattedDate].join('-');
+  const slugBase = [eventTitle, clubName, fieldName].join('-');
   return genSlug(slugBase, Event);
 }
 
@@ -49,7 +45,6 @@ export default genModelMutations(Event, {
           eventTitle: title,
           clubName: club.name,
           fieldName: field.name,
-          date,
         })),
       });
       return event;
