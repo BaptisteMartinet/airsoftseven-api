@@ -69,6 +69,7 @@ export default new GraphQLObjectType<unknown, Context>({
         const session = await Session.model.create({
           userId: user.id,
           expireAt,
+          usedAt: now,
         });
         const maxAge = differenceInMilliseconds(expireAt, now);
         ctx.res.cookie('session', session.id, {

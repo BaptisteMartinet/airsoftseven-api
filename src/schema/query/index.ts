@@ -1,9 +1,11 @@
 import type { Model } from '@sequelize-graphql/core';
 import type { Context } from '@/context';
+import type { SessionModel } from '@definitions/models';
 
 import { GraphQLFieldConfig, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { exposeModel } from '@sequelize-graphql/core';
 import { ResourceDoesNotExist } from '@/utils/errors';
+import { Hour } from '@/utils/time';
 import { Session, Event, Club, Field, User } from '@definitions/models';
 import { ensureSession } from '@/definitions/helpers/Session';
 
@@ -22,6 +24,13 @@ function makeFindBySlugField(model: Model<any>) {
   } as const satisfies GraphQLFieldConfig<unknown, Context>;
 }
 
+async function trackSessionUsage(session: SessionModel) {
+  const { usedAt } = session;
+  const now = new Date();
+  const hoursDiff = (now.getTime() - usedAt.getTime()) / Hour;
+  if (hoursDiff > 12) await session.update({ usedAt: now });
+}
+
 export default new GraphQLObjectType<unknown, Context>({
   name: 'Query',
   fields: () => ({
@@ -29,7 +38,9 @@ export default new GraphQLObjectType<unknown, Context>({
       type: Session.type,
       async resolve(_, args, ctx) {
         try {
-          return await ensureSession(ctx);
+          const session = await ensureSession(ctx);
+          await trackSessionUsage(session);
+          return session;
         } catch (e) {
           return null;
         }
