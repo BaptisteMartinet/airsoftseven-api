@@ -2,8 +2,17 @@ import type { Model } from '@sequelize-graphql/core';
 import type { Context } from '@/context';
 import type { SessionModel } from '@definitions/models';
 
-import { GraphQLFieldConfig, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { exposeModel } from '@sequelize-graphql/core';
+import { Op } from 'sequelize';
+import {
+  GraphQLFieldConfig,
+  GraphQLFloat,
+  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
+import { exposeModel, genModelOffsetPagination } from '@sequelize-graphql/core';
+import db from '@/db';
 import { ResourceDoesNotExist } from '@/utils/errors';
 import { Hour } from '@/utils/time';
 import { Session, Event, Club, Field, User } from '@definitions/models';
@@ -47,10 +56,25 @@ export default new GraphQLObjectType<unknown, Context>({
       },
     },
 
-    ...exposeModel(Event, {
-      findById: false,
-      findByIds: false,
-      pagination: 'events',
+    events: genModelOffsetPagination(Event, {
+      args: {
+        latitude: { type: new GraphQLNonNull(GraphQLFloat) },
+        longitude: { type: new GraphQLNonNull(GraphQLFloat) },
+        distance: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      config(source, args, ctx) {
+        const { latitude, longitude, distance } = args;
+        return {
+          include: Event.includeAssociation('field'),
+          where: db.where(
+            db.literal(
+              `ST_Distance_Sphere(POINT(${longitude}, ${latitude}), POINT(${db.col('field.longitude').col}, ${db.col('field.latitude').col}))`,
+            ),
+            Op.lt,
+            distance,
+          ),
+        };
+      },
     }),
 
     event: makeFindBySlugField(Event),
