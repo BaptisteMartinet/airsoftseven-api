@@ -19,7 +19,7 @@ const User: Model<UserModel> = new Model({
     username: { type: STRING, allowNull: false, exposed: true },
     email: { type: STRING, allowNull: false, exposed: false },
     passwordHash: { type: STRING, allowNull: false, exposed: false },
-    newsletterOptIn: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: true },
+    newsletterOptIn: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: false },
 
     ...SlugColumns,
   },
