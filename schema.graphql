@@ -1,6 +1,6 @@
 type Query {
   session: Session
-  events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+  events(latitude: Float!, longitude: Float!, distance: Int!, offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
   event(slug: String!): Event!
   clubs(offset: Int, limit: Int, order: [ClubOrderBy!], filters: ClubFilters): ClubOffsetConnection!
   club(slug: String!): Club!
@@ -25,7 +25,6 @@ type User {
   createdAt: Date!
   updatedAt: Date!
   username: String!
-  newsletterOptIn: Boolean!
   slugBase: String!
   slug: String!
   clubs(offset: Int, limit: Int, order: [ClubOrderBy!], filters: ClubFilters): ClubOffsetConnection!
@@ -121,7 +120,7 @@ enum OrderType {
 input EventFilters {
   title: StringFilters
   description: StringFilters
-  date: IntFilters
+  date: DateFilters
   durationDays: IntFilters
   price: FloatFilters
   capacity: IntFilters
@@ -151,6 +150,32 @@ input StringFilters {
 
   """Ends with substring"""
   endsWith: String
+}
+
+input DateFilters {
+  """Equal"""
+  eq: Date
+
+  """Not equal"""
+  ne: Date
+
+  """In"""
+  in: [Date!]
+
+  """Not in"""
+  notIn: [Date!]
+
+  """Less than"""
+  lt: Date
+
+  """Less than or equal"""
+  lte: Date
+
+  """Greater than"""
+  gt: Date
+
+  """Greater than or equal"""
+  gte: Date
 }
 
 input IntFilters {
