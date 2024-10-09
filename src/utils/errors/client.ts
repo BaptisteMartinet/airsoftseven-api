@@ -24,3 +24,9 @@ export class InvalidPermissions extends ClientError {
     super('InvalidPermissions', message);
   }
 }
+
+export class SpamDetected extends ClientError {
+  constructor() {
+    super('SpamDetected', 'SpamDetected');
+  }
+}
