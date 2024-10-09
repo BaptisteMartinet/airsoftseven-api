@@ -32,7 +32,7 @@ export default genModelMutations(Event, {
     },
     async resolve(_, args, ctx) {
       const fields = args;
-      const { title, date, clubId, fieldId } = fields;
+      const { title, clubId, fieldId } = fields;
       const user = await ensureSessionUser(ctx);
       const [club, field] = await Promise.all([
         Club.ensureExistence(clubId, { ctx }),
