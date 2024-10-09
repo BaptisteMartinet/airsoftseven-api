@@ -1,6 +1,7 @@
 import { GraphQLBoolean, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, genSlug } from '@sequelize-graphql/core';
 import { ClientError, InvalidPermissions } from '@/utils/errors';
+import { ensureNotSpam } from '@/utils/model';
 import { Club, Event } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
@@ -19,6 +20,7 @@ export default genModelMutations(Club, {
       const fields = args;
       const { name } = fields;
       const user = await ensureSessionUser(ctx);
+      await ensureNotSpam(Club, user.id);
       return Club.model.create({
         ...fields,
         userId: user.id,

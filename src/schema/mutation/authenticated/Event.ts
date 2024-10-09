@@ -1,6 +1,7 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, GraphQLDate, genSlug } from '@sequelize-graphql/core';
 import { InvalidPermissions } from '@/utils/errors';
+import { ensureNotSpam } from '@/utils/model';
 import { Event, Club, Field } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
@@ -35,6 +36,7 @@ export default genModelMutations(Event, {
       const fields = args;
       const { title, clubId, fieldId } = fields;
       const user = await ensureSessionUser(ctx);
+      await ensureNotSpam(Event, user.id);
       const [club, field] = await Promise.all([
         Club.ensureExistence(clubId, { ctx }),
         Field.ensureExistence(fieldId, { ctx }),
