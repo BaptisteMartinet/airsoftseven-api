@@ -18,3 +18,9 @@ export class ResourceDoesNotExist extends ClientError {
     super('ResourceDoesNotExist', `${modelName}#${identifier} does not exist.`);
   }
 }
+
+export class InvalidPermissions extends ClientError {
+  constructor(message: string) {
+    super('InvalidPermissions', message);
+  }
+}
