@@ -1,5 +1,6 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, GraphQLDate, genSlug } from '@sequelize-graphql/core';
+import { InvalidPermissions } from '@/utils/errors';
 import { Event, Club, Field } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
@@ -48,6 +49,14 @@ export default genModelMutations(Event, {
         })),
       });
       return event;
+    },
+  },
+
+  delete: {
+    async resolve(event, args, ctx) {
+      const user = await ensureSessionUser(ctx);
+      if (user.id !== event.userId) throw new InvalidPermissions('InvalidPermissions');
+      await event.destroy();
     },
   },
 });

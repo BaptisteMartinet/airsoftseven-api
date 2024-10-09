@@ -1,6 +1,7 @@
 import { GraphQLFloat, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, genSlug } from '@sequelize-graphql/core';
-import { Field } from '@definitions/models';
+import { ClientError, InvalidPermissions } from '@/utils/errors';
+import { Field, Event } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
 export default genModelMutations(Field, {
@@ -23,6 +24,16 @@ export default genModelMutations(Field, {
         userId: user.id,
         ...(await genSlug(name, Field)),
       });
+    },
+  },
+
+  delete: {
+    async resolve(field, args, ctx) {
+      const user = await ensureSessionUser(ctx);
+      if (user.id !== field.userId) throw new InvalidPermissions('InvalidPermissions');
+      const hasEvents = await Event.exists({ where: { fieldId: field.id } });
+      if (hasEvents) throw new ClientError('FieldHasEvents', 'A field with events cannot be deleted');
+      await field.destroy();
     },
   },
 });
