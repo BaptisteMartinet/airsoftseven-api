@@ -12,12 +12,12 @@ async function syncModels(models: Array<Model<any>>) {
   const args = parseArgs(process.argv);
   await db.authenticate();
   console.info('DB authenticated');
-  const force = args.has('--force');
-  const alter = args.has('--alter');
   for (const model of models) {
-    model.associations;
-    await model.model.sync({ force, alter });
+    model.associations; // Load associations
   }
+  const force = args.has('force');
+  const alter = args.has('alter');
+  await db.sync({ force, alter });
   console.info(`Synced ${models.length} models.`);
 }
 
