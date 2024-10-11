@@ -2,8 +2,9 @@ import { GraphQLBoolean, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, genSlug } from '@sequelize-graphql/core';
 import { ClientError, InvalidPermissions } from '@/utils/errors';
 import { ensureNotSpam } from '@/utils/model';
-import { Club, Event } from '@definitions/models';
+import { Club, ClubReport, Event } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
+import { makeReportFieldConfig } from '@/definitions/helpers/Report';
 
 export default genModelMutations(Club, {
   prefix: 'Authenticated',
@@ -38,4 +39,8 @@ export default genModelMutations(Club, {
       await club.destroy();
     },
   },
+
+  fields: () => ({
+    report: makeReportFieldConfig(Club, ClubReport, 'clubId'),
+  }),
 });

@@ -3,7 +3,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 
 import { Model, STRING, BOOLEAN, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { Event, User } from './index';
+import { Event, User, ClubReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from './shared';
 
 /**
@@ -48,6 +48,11 @@ const Club: Model<ClubModel> = new Model({
       model: Event,
       type: 'hasMany',
       exposed: true,
+    },
+    reports: {
+      model: ClubReport,
+      type: 'hasMany',
+      exposed: false,
     },
   }),
   sequelize,

@@ -9,3 +9,14 @@ export const LanguageEnum = ENUM({
   name: 'Language',
   values: Language,
 });
+
+export enum ReportReason {
+  Duplicate = 'Duplicate',
+  Offensive = 'Offensive',
+  Other = 'Other',
+}
+
+export const ReportReasonEnum = ENUM({
+  name: 'ReportReason',
+  values: ReportReason,
+});
