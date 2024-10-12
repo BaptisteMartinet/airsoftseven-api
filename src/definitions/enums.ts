@@ -20,3 +20,15 @@ export const ReportReasonEnum = ENUM({
   name: 'ReportReason',
   values: ReportReason,
 });
+
+export enum ReportableResource {
+  User = 'User',
+  Club = 'Club',
+  Field = 'Field',
+  Event = 'Event',
+}
+
+export const ReportableResourceEnum = ENUM({
+  name: 'ReportableResource',
+  values: ReportableResource,
+});

@@ -3,7 +3,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 
 import { Model, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { ClubReport, User } from '@definitions/models';
+import { User, ClubReport, FieldReport, EventReport, UserReport } from '@definitions/models';
 import { ReportReasonEnum, type ReportReason } from '@definitions/enums';
 
 export interface ReportModel extends InferModelAttributesWithDefaults<ReportModel> {
@@ -25,9 +25,28 @@ const Report: Model<ReportModel> = new Model({
       type: 'belongsTo',
       exposed: true,
     },
-    report: {
+    clubReport: {
       model: ClubReport,
       type: 'hasOne',
+      foreignKey: 'reportId',
+      exposed: false,
+    },
+    fieldReport: {
+      model: FieldReport,
+      type: 'hasOne',
+      foreignKey: 'reportId',
+      exposed: false,
+    },
+    eventReport: {
+      model: EventReport,
+      type: 'hasOne',
+      foreignKey: 'reportId',
+      exposed: false,
+    },
+    userReport: {
+      model: UserReport,
+      type: 'hasOne',
+      foreignKey: 'reportId',
       exposed: false,
     },
   }),

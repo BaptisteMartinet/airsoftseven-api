@@ -6,3 +6,6 @@ export { default as Event, type EventModel } from './Event';
 export { default as EmailVerificationCode, type EmailVerificationCodeModel } from './EmailVerificationCode';
 export { default as Report } from './Report';
 export { default as ClubReport } from './ClubReport';
+export { default as FieldReport } from './FieldReport';
+export { default as EventReport } from './EventReport';
+export { default as UserReport } from './UserReport';
