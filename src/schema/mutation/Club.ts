@@ -7,7 +7,6 @@ import { ensureSessionUser } from '@definitions/helpers/Session';
 import { makeReportFieldConfig } from '@/definitions/helpers/Report';
 
 export default genModelMutations(Club, {
-  prefix: 'Authenticated',
   create: {
     args: {
       name: { type: new GraphQLNonNull(GraphQLString) },

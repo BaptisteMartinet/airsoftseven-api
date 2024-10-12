@@ -1,12 +1,16 @@
 import { GraphQLObjectType } from 'graphql';
 import { scopedField } from '@sequelize-graphql/core';
 import session from './session';
-import authenticated from './authenticated';
+import Club from './Club';
+import Field from './Field';
+import Event from './Event';
 
 export default new GraphQLObjectType({
   name: 'Mutation',
   fields: {
     session: scopedField(session),
-    authenticated: scopedField(authenticated),
+    club: scopedField(Club),
+    field: scopedField(Field),
+    event: scopedField(Event),
   },
 });

@@ -6,7 +6,6 @@ import { Field, Event } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
 export default genModelMutations(Field, {
-  prefix: 'Authenticated',
   create: {
     args: {
       name: { type: new GraphQLNonNull(GraphQLString) },

@@ -19,7 +19,6 @@ async function genEventSlug({
 }
 
 export default genModelMutations(Event, {
-  prefix: 'Authenticated',
   create: {
     args: {
       title: { type: new GraphQLNonNull(GraphQLString) },
