@@ -23,3 +23,7 @@ attachMemoizerArgsFormatter(_ensureSessionUser, ([ctx]) => ctx.sessionId ?? '');
 export async function ensureSessionUser(ctx: Context) {
   return ctx.memoized(_ensureSessionUser, ctx);
 }
+
+export async function getSessionUser(ctx: Context) {
+  return ensureSessionUser(ctx).catch((err) => null);
+}
