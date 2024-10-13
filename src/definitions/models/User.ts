@@ -3,7 +3,7 @@ import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { Club, Event, Field, Session, UserReport } from './index';
+import { Club, Event, Field, Report, Session, UserReport } from './index';
 import { SlugColumns, type SlugColumnsT } from './shared';
 
 export interface UserModel extends SlugColumnsT, InferModelAttributesWithDefaults<UserModel> {
@@ -46,6 +46,12 @@ const User: Model<UserModel> = new Model({
       exposed: true,
     },
     reports: {
+      model: Report,
+      type: 'hasMany',
+      foreignKey: 'authorId',
+      exposed: true,
+    },
+    userReports: {
       model: UserReport,
       type: 'hasMany',
       exposed: false,

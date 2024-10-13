@@ -10,7 +10,7 @@ export interface ReportModel extends InferModelAttributesWithDefaults<ReportMode
   reason: ReportReason;
   message: string | null;
 
-  userId: ForeignKey<IdType>;
+  authorId: ForeignKey<IdType>;
 }
 
 const Report: Model<ReportModel> = new Model({
@@ -23,6 +23,7 @@ const Report: Model<ReportModel> = new Model({
     user: {
       model: User,
       type: 'belongsTo',
+      foreignKey: 'authorId',
       exposed: true,
     },
     clubReport: {
