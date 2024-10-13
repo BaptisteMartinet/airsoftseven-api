@@ -5,6 +5,7 @@ import { Model, DATE, STRING, FLOAT, INTEGER, TEXT } from '@sequelize-graphql/co
 import sequelize from '@db/index';
 import { User, Club, Field, EventReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
+import fields from '@schema/model/Event';
 
 /**
  * TODO
@@ -39,6 +40,7 @@ const Event: Model<EventModel> = new Model({
 
     ...SlugColumns,
   },
+  fields,
   associations: () => ({
     user: {
       model: User,

@@ -5,6 +5,7 @@ import { Model, STRING, BOOLEAN, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Event, User, ClubReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
+import fields from '@schema/model/Club';
 
 /**
  * TODO Gerer les points suivants
@@ -38,6 +39,7 @@ const Club: Model<ClubModel> = new Model({
 
     ...SlugColumns,
   },
+  fields,
   associations: () => ({
     user: {
       model: User,

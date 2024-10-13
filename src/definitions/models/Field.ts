@@ -5,6 +5,7 @@ import { DOUBLE, Model, STRING, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Event, User, FieldReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
+import fields from '@schema/model/Field';
 
 export interface FieldModel extends SlugColumnsT, InferModelAttributesWithDefaults<FieldModel> {
   name: string;
@@ -29,6 +30,7 @@ const Field: Model<FieldModel> = new Model({
 
     ...SlugColumns,
   },
+  fields,
   associations: () => ({
     user: {
       model: User,

@@ -5,6 +5,7 @@ import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Club, Event, Field, Report, Session, UserReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
+import fields from '@schema/model/User';
 
 export interface UserModel extends SlugColumnsT, InferModelAttributesWithDefaults<UserModel> {
   username: string;
@@ -24,6 +25,7 @@ const User: Model<UserModel> = new Model({
     ...SlugColumns,
   },
   indexes: [{ fields: ['email'], unique: true }],
+  fields,
   associations: () => ({
     sessions: {
       model: Session,
