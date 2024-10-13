@@ -46,7 +46,7 @@ export default genModelMutations(Report, {
           [reportModelColumn]: instance.id,
         },
       });
-      if (alreadyReported) throw new ClientError('AlreadyReport', `${resourceType}#${resourceId} already reported.`);
+      if (alreadyReported) throw new ClientError('AlreadyReported', `${resourceType}#${resourceId} already reported.`);
       const report = await Report.model.create({
         reason,
         message,
