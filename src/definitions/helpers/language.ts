@@ -1,8 +1,17 @@
+import { objectEntries } from '@/utils/record';
 import { Language } from '@definitions/enums';
+import { DefaultLanguage } from '@/constants/language';
 
-const LanguagesSet = new Set(Object.values(Language));
+const LanguageEnumToStrsObjMap: Record<Language, Array<string>> = {
+  French: ['fr'],
+  English: ['en'],
+};
+const StrToLanguageMap = new Map(
+  objectEntries(LanguageEnumToStrsObjMap).flatMap(([language, strs]) => strs.map((str) => [str, language] as const)),
+);
 
-export function strToLanguage(lang: string) {
-  if (LanguagesSet.has(lang as Language)) return lang as Language;
-  throw new Error(`Invalid language: ${lang}`);
+export function ensureStrLanguage(lang: string) {
+  const language = StrToLanguageMap.get(lang);
+  if (language) return language;
+  return DefaultLanguage;
 }

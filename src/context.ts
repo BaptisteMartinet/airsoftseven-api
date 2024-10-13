@@ -4,7 +4,7 @@ import type { Language } from '@definitions/enums';
 
 import { makeContext } from '@sequelize-graphql/core';
 import { DefaultLanguage } from '@constants/language';
-import { strToLanguage } from '@definitions/helpers/language';
+import { ensureStrLanguage } from '@definitions/helpers/language';
 
 export interface Context extends ContextBase {
   req: Request;
@@ -15,8 +15,8 @@ export interface Context extends ContextBase {
 
 export default async function createContext(args: { req: Request; res: Response }): Promise<Context> {
   const { req, res } = args;
-  const contentLanguageHeader = req.headers['content-language'];
-  const language = contentLanguageHeader ? strToLanguage(contentLanguageHeader) : DefaultLanguage;
+  const languageCookie = req.cookies['NEXT_LOCALE'];
+  const language = languageCookie ? ensureStrLanguage(languageCookie) : DefaultLanguage;
   const sessionId = req.signedCookies.session;
   return {
     ...makeContext(),
