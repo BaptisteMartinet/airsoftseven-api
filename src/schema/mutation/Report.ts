@@ -37,12 +37,12 @@ export default genModelMutations(Report, {
     async resolve(source, args, ctx) {
       const { resourceId, resourceType, reason, message } = args;
       const user = await ensureSessionUser(ctx);
-      await ensureNotSpam(Report, user.id);
+      await ensureNotSpam(Report, user.id, { userIdColumn: 'authorId' });
       const { model, reportModel, reportModelColumn } = ReportableModelObjMap[resourceType as ReportableResource];
       const instance = await model.ensureExistence(resourceId, { ctx });
       const alreadyReported = await reportModel.exists({
         where: {
-          userId: user.id,
+          authorId: user.id,
           [reportModelColumn]: instance.id,
         },
       });
