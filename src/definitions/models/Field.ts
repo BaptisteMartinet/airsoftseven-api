@@ -3,8 +3,8 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 
 import { DOUBLE, Model, STRING, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { Event, User, FieldReport } from './index';
-import { SlugColumns, type SlugColumnsT } from './shared';
+import { Event, User, FieldReport } from '@definitions/models';
+import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 
 export interface FieldModel extends SlugColumnsT, InferModelAttributesWithDefaults<FieldModel> {
   name: string;

@@ -3,8 +3,8 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 
 import { Model, DATE, STRING, FLOAT, INTEGER, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { User, Club, Field, EventReport } from './index';
-import { SlugColumns, type SlugColumnsT } from './shared';
+import { User, Club, Field, EventReport } from '@definitions/models';
+import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 
 /**
  * TODO

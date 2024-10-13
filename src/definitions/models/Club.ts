@@ -4,7 +4,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 import { Model, STRING, BOOLEAN, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Event, User, ClubReport } from '@definitions/models';
-import { SlugColumns, type SlugColumnsT } from './shared';
+import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 
 /**
  * TODO Gerer les points suivants

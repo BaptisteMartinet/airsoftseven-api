@@ -3,7 +3,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 
 import { DATE, Model } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { User } from './index';
+import { User } from '@definitions/models';
 
 export interface SessionModel extends InferModelAttributesWithDefaults<SessionModel> {
   expireAt: Date;
