@@ -12,7 +12,6 @@ import schema from './schema';
 
 async function main() {
   await db.authenticate();
-  // await db.sync({ force: true }); // TODO remove
   console.info('DB successfully setup');
 
   const app = express();
