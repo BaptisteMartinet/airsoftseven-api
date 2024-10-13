@@ -1,4 +1,4 @@
-import { GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
+import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, Model } from '@sequelize-graphql/core';
 import { ensureNotSpam } from '@/utils/model';
 import { ReportReasonEnum, ReportableResourceEnum, ReportableResource } from '@/definitions/enums';
@@ -28,7 +28,7 @@ const ReportableModelObjMap: Record<
 export default genModelMutations(Report, {
   create: {
     args: {
-      resourceId: { type: new GraphQLNonNull(GraphQLInt) },
+      resourceId: { type: new GraphQLNonNull(GraphQLID) },
       resourceType: { type: new GraphQLNonNull(ReportableResourceEnum.gqlType) },
       reason: { type: new GraphQLNonNull(ReportReasonEnum.gqlType) },
       message: { type: GraphQLString },
