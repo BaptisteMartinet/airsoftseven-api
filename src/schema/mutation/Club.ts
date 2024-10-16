@@ -19,7 +19,7 @@ export default genModelMutations(Club, {
       const fields = args;
       const { name } = fields;
       const user = await ensureSessionUser(ctx);
-      await ensureNotSpam(Club, user.id);
+      await ensureNotSpam(Club, user.id, { userIdColumn: 'authorId' });
       return Club.model.create({
         ...fields,
         authorId: user.id,

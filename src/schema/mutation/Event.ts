@@ -35,7 +35,7 @@ export default genModelMutations(Event, {
       const fields = args;
       const { title, clubId, fieldId } = fields;
       const user = await ensureSessionUser(ctx);
-      await ensureNotSpam(Event, user.id);
+      await ensureNotSpam(Event, user.id, { userIdColumn: 'authorId' });
       const [club, field] = await Promise.all([
         Club.ensureExistence(clubId, { ctx }),
         Field.ensureExistence(fieldId, { ctx }),

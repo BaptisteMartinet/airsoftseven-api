@@ -19,7 +19,7 @@ export default genModelMutations(Field, {
       const fields = args;
       const { name } = fields;
       const user = await ensureSessionUser(ctx);
-      await ensureNotSpam(Field, user.id);
+      await ensureNotSpam(Field, user.id, { userIdColumn: 'authorId' });
       return Field.model.create({
         ...fields,
         authorId: user.id,
