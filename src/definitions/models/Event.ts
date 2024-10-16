@@ -22,7 +22,7 @@ export interface EventModel extends SlugColumnsT, InferModelAttributesWithDefaul
   capacity: number | null;
   publicURL: string | null;
 
-  userId: ForeignKey<IdType>;
+  authorId: ForeignKey<IdType>;
   clubId: ForeignKey<IdType>;
   fieldId: ForeignKey<IdType>;
 }
@@ -42,9 +42,10 @@ const Event: Model<EventModel> = new Model({
   },
   fields,
   associations: () => ({
-    user: {
+    author: {
       model: User,
       type: 'belongsTo',
+      foreignKey: 'authorId',
       exposed: true,
     },
     club: {

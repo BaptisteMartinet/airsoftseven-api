@@ -24,7 +24,7 @@ export interface ClubModel extends SlugColumnsT, InferModelAttributesWithDefault
   rentals: boolean | null;
   acceptUnderage: boolean | null;
 
-  userId: ForeignKey<IdType>;
+  authorId: ForeignKey<IdType>;
 }
 
 const Club: Model<ClubModel> = new Model({
@@ -41,20 +41,23 @@ const Club: Model<ClubModel> = new Model({
   },
   fields,
   associations: () => ({
-    user: {
+    author: {
       model: User,
       type: 'belongsTo',
+      foreignKey: 'authorId',
       exposed: true,
     },
     events: {
       model: Event,
       type: 'hasMany',
       exposed: true,
+      deleteCascade: true,
     },
     reports: {
       model: ClubReport,
       type: 'hasMany',
       exposed: false,
+      deleteCascade: true,
     },
   }),
   sequelize,

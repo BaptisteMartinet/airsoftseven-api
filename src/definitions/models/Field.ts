@@ -15,7 +15,7 @@ export interface FieldModel extends SlugColumnsT, InferModelAttributesWithDefaul
   longitude: string;
   publicURL: string;
 
-  userId: ForeignKey<IdType>;
+  authorId: ForeignKey<IdType>;
 }
 
 const Field: Model<FieldModel> = new Model({
@@ -32,20 +32,23 @@ const Field: Model<FieldModel> = new Model({
   },
   fields,
   associations: () => ({
-    user: {
+    author: {
       model: User,
       type: 'belongsTo',
+      foreignKey: 'authorId',
       exposed: true,
     },
     events: {
       model: Event,
       type: 'hasMany',
       exposed: true,
+      deleteCascade: true,
     },
     reports: {
       model: FieldReport,
       type: 'hasMany',
       exposed: false,
+      deleteCascade: true,
     },
   }),
   sequelize,

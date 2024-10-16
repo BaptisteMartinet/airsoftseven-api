@@ -35,16 +35,19 @@ const User: Model<UserModel> = new Model({
     clubs: {
       model: Club,
       type: 'hasMany',
+      foreignKey: 'authorId',
       exposed: true,
     },
     fields: {
       model: Field,
       type: 'hasMany',
+      foreignKey: 'authorId',
       exposed: true,
     },
     events: {
       model: Event,
       type: 'hasMany',
+      foreignKey: 'authorId',
       exposed: true,
     },
     reports: {
