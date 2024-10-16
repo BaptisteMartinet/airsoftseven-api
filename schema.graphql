@@ -30,6 +30,8 @@ type User {
   clubs(offset: Int, limit: Int, order: [ClubOrderBy!], filters: ClubFilters): ClubOffsetConnection!
   fields(offset: Int, limit: Int, order: [FieldOrderBy!], filters: FieldFilters): FieldOffsetConnection!
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+  reports(offset: Int, limit: Int, order: [ReportOrderBy!], filters: ReportFilters): ReportOffsetConnection!
+  reported: Boolean
 }
 
 type ClubOffsetConnection {
@@ -49,8 +51,9 @@ type Club {
   acceptUnderage: Boolean
   slugBase: String!
   slug: String!
-  user: User
+  author: User
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+  reported: Boolean
 }
 
 type EventOffsetConnection {
@@ -71,9 +74,10 @@ type Event {
   publicURL: String
   slugBase: String!
   slug: String!
-  user: User
+  author: User
   club: Club
   field: Field
+  reported: Boolean
 }
 
 type Field {
@@ -88,8 +92,9 @@ type Field {
   publicURL: String
   slugBase: String!
   slug: String!
-  user: User
+  author: User
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+  reported: Boolean
 }
 
 input EventOrderBy {
@@ -309,9 +314,64 @@ input FieldFilters {
   slug: StringFilters
 }
 
+type ReportOffsetConnection {
+  nodes: [Report!]
+  count: Int!
+}
+
+type Report {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  reason: ReportReason!
+  message: String
+  user: User
+}
+
+enum ReportReason {
+  Duplicate
+  Offensive
+  Other
+}
+
+input ReportOrderBy {
+  field: ReportFields!
+  ordering: OrderType!
+}
+
+enum ReportFields {
+  reason
+  message
+  createdAt
+  updatedAt
+}
+
+"""The Report model filters"""
+input ReportFilters {
+  reason: ReportReasonFilters
+  message: StringFilters
+}
+
+input ReportReasonFilters {
+  """Equal"""
+  eq: ReportReason
+
+  """Not equal"""
+  ne: ReportReason
+
+  """In"""
+  in: [ReportReason!]
+
+  """Not in"""
+  notIn: [ReportReason!]
+}
+
 type Mutation {
   session: SessionMutation!
-  authenticated: AuthenticatedMutation!
+  club: ClubMutation!
+  field: FieldMutation!
+  event: EventMutation!
+  report: ReportMutation!
 }
 
 type SessionMutation {
@@ -321,17 +381,12 @@ type SessionMutation {
   logout: Boolean!
 }
 
-type AuthenticatedMutation {
-  club: AuthenticatedClubMutation!
-  field: AuthenticatedFieldMutation!
-  event: AuthenticatedEventMutation!
+type ClubMutation {
+  create(input: ClubCreateInput!): Club!
+  delete(id: ID!): Boolean!
 }
 
-type AuthenticatedClubMutation {
-  create(input: AuthenticatedClubCreateInput!): Club!
-}
-
-input AuthenticatedClubCreateInput {
+input ClubCreateInput {
   name: String!
   description: String
   publicURL: String
@@ -340,11 +395,12 @@ input AuthenticatedClubCreateInput {
   acceptUnderage: Boolean
 }
 
-type AuthenticatedFieldMutation {
-  create(input: AuthenticatedFieldCreateInput!): Field!
+type FieldMutation {
+  create(input: FieldCreateInput!): Field!
+  delete(id: ID!): Boolean!
 }
 
-input AuthenticatedFieldCreateInput {
+input FieldCreateInput {
   name: String!
   description: String
   address: String!
@@ -353,11 +409,12 @@ input AuthenticatedFieldCreateInput {
   publicURL: String
 }
 
-type AuthenticatedEventMutation {
-  create(input: AuthenticatedEventCreateInput!): Event!
+type EventMutation {
+  create(input: EventCreateInput!): Event!
+  delete(id: ID!): Boolean!
 }
 
-input AuthenticatedEventCreateInput {
+input EventCreateInput {
   title: String!
   description: String
   date: Date!
@@ -367,4 +424,22 @@ input AuthenticatedEventCreateInput {
   publicURL: String
   clubId: ID!
   fieldId: ID!
+}
+
+type ReportMutation {
+  create(input: ReportCreateInput!): Report!
+}
+
+input ReportCreateInput {
+  resourceId: ID!
+  resourceType: ReportableResource!
+  reason: ReportReason!
+  message: String
+}
+
+enum ReportableResource {
+  User
+  Club
+  Field
+  Event
 }
