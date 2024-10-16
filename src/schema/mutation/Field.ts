@@ -22,7 +22,7 @@ export default genModelMutations(Field, {
       await ensureNotSpam(Field, user.id);
       return Field.model.create({
         ...fields,
-        userId: user.id,
+        authorId: user.id,
         ...(await genSlug(name, Field)),
       });
     },
@@ -31,7 +31,7 @@ export default genModelMutations(Field, {
   delete: {
     async resolve(field, args, ctx) {
       const user = await ensureSessionUser(ctx);
-      if (user.id !== field.userId) throw new InvalidPermissions('InvalidPermissions');
+      if (user.id !== field.authorId) throw new InvalidPermissions('InvalidPermissions');
       const hasEvents = await Event.exists({ where: { fieldId: field.id } });
       if (hasEvents) throw new ClientError('FieldHasEvents', 'A field with events cannot be deleted');
       await field.destroy();

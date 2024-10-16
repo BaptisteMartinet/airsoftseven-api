@@ -22,7 +22,7 @@ export default genModelMutations(Club, {
       await ensureNotSpam(Club, user.id);
       return Club.model.create({
         ...fields,
-        userId: user.id,
+        authorId: user.id,
         ...(await genSlug(name, Club)),
       });
     },
@@ -31,7 +31,7 @@ export default genModelMutations(Club, {
   delete: {
     async resolve(club, args, ctx) {
       const user = await ensureSessionUser(ctx);
-      if (user.id !== club.userId) throw new InvalidPermissions('InvalidPermissions');
+      if (user.id !== club.authorId) throw new InvalidPermissions('InvalidPermissions');
       const hasEvents = await Event.exists({ where: { clubId: club.id } });
       if (hasEvents) throw new ClientError('ClubHasEvents', 'A club with events cannot be deleted');
       await club.destroy();

@@ -42,7 +42,7 @@ export default genModelMutations(Event, {
       ]);
       const event = await Event.model.create({
         ...fields,
-        userId: user.id,
+        authorId: user.id,
         ...(await genEventSlug({
           eventTitle: title,
           clubName: club.name,
@@ -56,7 +56,7 @@ export default genModelMutations(Event, {
   delete: {
     async resolve(event, args, ctx) {
       const user = await ensureSessionUser(ctx);
-      if (user.id !== event.userId) throw new InvalidPermissions('InvalidPermissions');
+      if (user.id !== event.authorId) throw new InvalidPermissions('InvalidPermissions');
       await event.destroy();
     },
   },
