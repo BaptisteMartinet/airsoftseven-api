@@ -1,14 +1,11 @@
 import type { Context } from '@/context';
 
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { differenceInMilliseconds } from 'date-fns';
 import { genSlug } from '@sequelize-graphql/core';
 import { hashPassword, comparePassword } from '@utils/password';
-import { Day } from '@utils/time';
 import { UserBanned } from '@/utils/errors';
-import { __PROD__, __DOMAIN__ } from '@constants/env';
 import { Session, User } from '@definitions/models';
-import { ensureSession } from '@definitions/helpers/Session';
+import { createSession, ensureSession, setSessionCookie } from '@definitions/helpers/Session';
 import { createVerificationCode, ensureVerificationCode } from '@definitions/helpers/EmailVerification';
 import { onVerifyEmail } from '@notifications/dispatchers';
 
@@ -66,23 +63,8 @@ export default new GraphQLObjectType<unknown, Context>({
         if (!passwordMatch) throw new Error('Email or password is invalid'); // TODO custom error
         if (user.bannedAt) throw new UserBanned();
 
-        const now = new Date();
-        const expireAt = new Date(now.getTime() + Day * 30);
-        const session = await Session.model.create({
-          userId: user.id,
-          expireAt,
-          usedAt: now,
-        });
-        const maxAge = differenceInMilliseconds(expireAt, now);
-        ctx.res.cookie('session', session.id, {
-          maxAge,
-          httpOnly: true,
-          secure: __PROD__,
-          signed: true,
-          sameSite: 'lax',
-          path: '/',
-          domain: __PROD__ ? `.${__DOMAIN__}` : '',
-        });
+        const session = await createSession(user.id);
+        setSessionCookie(session, ctx);
         return session;
       },
     },
