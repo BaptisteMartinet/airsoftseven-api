@@ -427,7 +427,7 @@ type Mutation {
 
 type SessionMutation {
   verifyEmail(email: String!): Boolean!
-  register(code: String!, username: String!, email: String!, password: String!, newsletterOptIn: Boolean): Boolean!
+  register(code: String!, username: String!, email: String!, password: String!, newsletterOptIn: Boolean): Session!
   login(email: String!, password: String!): Session!
   logout: Boolean!
 }
