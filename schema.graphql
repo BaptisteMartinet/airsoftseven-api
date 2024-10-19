@@ -422,6 +422,7 @@ type Mutation {
   field: FieldMutation!
   event: EventMutation!
   report: ReportMutation!
+  user: UserMutation!
 }
 
 type SessionMutation {
@@ -493,4 +494,8 @@ enum ReportableResource {
   Club
   Field
   Event
+}
+
+type UserMutation {
+  ban(id: ID!): User
 }
