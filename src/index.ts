@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { PORT, COOKIES_SECRET_KEY, PROD, DOMAIN_FULL } from '@constants/env';
+import { __PORT__, __COOKIES_SECRET_KEY__, __PROD__, __DOMAIN_FULL__ } from '@constants/env';
 import db from './db';
 import context from './context';
 import schema from './schema';
@@ -25,18 +25,18 @@ async function main() {
   app.use(
     '/',
     cors<cors.CorsRequest>({
-      origin: PROD ? DOMAIN_FULL : true,
+      origin: __PROD__ ? __DOMAIN_FULL__ : true,
       credentials: true,
     }),
     express.json({ limit: '50mb' }),
-    cookieParser(COOKIES_SECRET_KEY),
+    cookieParser(__COOKIES_SECRET_KEY__),
     expressMiddleware(server, {
       context,
     }),
   );
 
-  await new Promise<void>((resolve) => httpServer.listen({ port: PORT }, resolve));
-  console.info(`Server ready at http://localhost:${PORT}/`);
+  await new Promise<void>((resolve) => httpServer.listen({ port: __PORT__ }, resolve));
+  console.info(`Server ready at http://localhost:${__PORT__}/`);
 }
 
 main().catch(console.error);

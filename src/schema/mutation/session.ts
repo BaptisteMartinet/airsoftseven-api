@@ -5,7 +5,7 @@ import { differenceInMilliseconds } from 'date-fns';
 import { genSlug } from '@sequelize-graphql/core';
 import { hashPassword, comparePassword } from '@utils/password';
 import { Day } from '@utils/time';
-import { PROD, DOMAIN } from '@constants/env';
+import { __PROD__, __DOMAIN__ } from '@constants/env';
 import { Session, User } from '@definitions/models';
 import { ensureSession } from '@definitions/helpers/Session';
 import { createVerificationCode, ensureVerificationCode } from '@definitions/helpers/EmailVerification';
@@ -75,11 +75,11 @@ export default new GraphQLObjectType<unknown, Context>({
         ctx.res.cookie('session', session.id, {
           maxAge,
           httpOnly: true,
-          secure: PROD,
+          secure: __PROD__,
           signed: true,
           sameSite: 'lax',
           path: '/',
-          domain: PROD ? `.${DOMAIN}` : '',
+          domain: __PROD__ ? `.${__DOMAIN__}` : '',
         });
         return session;
       },

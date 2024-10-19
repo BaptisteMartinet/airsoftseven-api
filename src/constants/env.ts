@@ -1,14 +1,14 @@
 import { ensureEnvInt, ensureEnvString } from '@utils/env';
 
-export const DATABASE_URL = ensureEnvString('DATABASE_URL');
-export const JWT_SECRET_KEY = ensureEnvString('JWT_SECRET_KEY');
-export const COOKIES_SECRET_KEY = ensureEnvString('COOKIES_SECRET_KEY');
-export const SENDGRID_API_KEY = ensureEnvString('SENDGRID_API_KEY');
-export const PORT = ensureEnvInt('PORT');
+export const __DATABASE_URL__ = ensureEnvString('DATABASE_URL');
+export const __JWT_SECRET_KEY__ = ensureEnvString('JWT_SECRET_KEY');
+export const __COOKIES_SECRET_KEY__ = ensureEnvString('COOKIES_SECRET_KEY');
+export const __SENDGRID_API_KEY__ = ensureEnvString('SENDGRID_API_KEY');
+export const __PORT__ = ensureEnvInt('PORT');
 
-export const DOMAIN = ensureEnvString('DOMAIN');
-export const DOMAIN_FULL = `https://${DOMAIN}`;
+export const __DOMAIN__ = ensureEnvString('DOMAIN');
+export const __DOMAIN_FULL__ = `https://${__DOMAIN__}`;
 
-export const ENV = ensureEnvString('NODE_ENV');
-export const PROD = ENV === 'production';
-export const DEV = ENV === 'dev';
+export const __ENV__ = ensureEnvString('NODE_ENV');
+export const __PROD__ = __ENV__ === 'production';
+export const __DEV__ = __ENV__ === 'dev';

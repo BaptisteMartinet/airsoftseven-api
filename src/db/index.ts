@@ -1,4 +1,4 @@
 import { Sequelize } from 'sequelize';
-import { DATABASE_URL } from '@constants/env';
+import { __DATABASE_URL__ } from '@constants/env';
 
-export default new Sequelize(DATABASE_URL);
+export default new Sequelize(__DATABASE_URL__);
