@@ -7,12 +7,6 @@ import { User, Club, Field, EventReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 import fields from '@schema/model/Event';
 
-/**
- * TODO
- * - Puissances des repliques
- * - Horaires
- */
-
 export interface EventModel extends SlugColumnsT, InferModelAttributesWithDefaults<EventModel> {
   title: string;
   description: string | null;
