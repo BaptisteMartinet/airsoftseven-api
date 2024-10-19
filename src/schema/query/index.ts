@@ -65,7 +65,9 @@ export default new GraphQLObjectType<unknown, Context>({
       config(source, args, ctx) {
         const { latitude, longitude, distance } = args;
         return {
-          include: Event.includeAssociation('field'),
+          include: Event.includeAssociation('field', {
+            required: true,
+          }),
           where: db.where(
             db.literal(
               `ST_Distance_Sphere(POINT(${longitude}, ${latitude}), POINT(${db.col('field.longitude').col}, ${db.col('field.latitude').col}))`,
