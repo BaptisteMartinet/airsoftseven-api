@@ -1,8 +1,9 @@
 import { GraphQLFloat, GraphQLNonNull, GraphQLString } from 'graphql';
-import { genModelMutations, genSlug } from '@sequelize-graphql/core';
+import { genModelMutations, genSlug, GraphQLNonNullList } from '@sequelize-graphql/core';
 import { ClientError, InvalidPermissions } from '@/utils/errors';
 import { ensureNotSpam } from '@/utils/model';
-import { Field, Event } from '@definitions/models';
+import { Field, Event, FieldPlaygroundType } from '@definitions/models';
+import { PlaygroundTypeEnum, PlaygroundType } from '@/definitions/enums';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 
 export default genModelMutations(Field, {
@@ -14,17 +15,25 @@ export default genModelMutations(Field, {
       latitude: { type: new GraphQLNonNull(GraphQLFloat) },
       longitude: { type: new GraphQLNonNull(GraphQLFloat) },
       publicURL: { type: GraphQLString },
+      playgroundTypes: { type: new GraphQLNonNullList(PlaygroundTypeEnum.gqlType) },
     },
     async resolve(_, args, ctx) {
-      const fields = args;
+      const { playgroundTypes, ...fields } = args;
       const { name } = fields;
       const user = await ensureSessionUser(ctx);
       await ensureNotSpam(Field, user.id, { userIdColumn: 'authorId' });
-      return Field.model.create({
+      const field = await Field.model.create({
         ...fields,
         authorId: user.id,
         ...(await genSlug(name, Field)),
       });
+      await FieldPlaygroundType.model.bulkCreate(
+        playgroundTypes.map((playgroundType: PlaygroundType) => ({
+          fieldId: field.id,
+          type: playgroundType,
+        })),
+      );
+      return field;
     },
   },
 

@@ -3,7 +3,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 
 import { DOUBLE, Model, STRING, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { Event, User, FieldReport } from '@definitions/models';
+import { Event, User, FieldReport, FieldPlaygroundType } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 import fields from '@schema/model/Field';
 
@@ -49,6 +49,12 @@ const Field: Model<FieldModel> = new Model({
       type: 'hasMany',
       exposed: false,
       deleteCascade: true,
+    },
+    playgroundTypes: {
+      model: FieldPlaygroundType,
+      type: 'hasMany',
+      deleteCascade: true,
+      exposed: true,
     },
   }),
   sequelize,

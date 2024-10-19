@@ -32,3 +32,15 @@ export const ReportableResourceEnum = ENUM({
   name: 'ReportableResource',
   values: ReportableResource,
 });
+
+export enum PlaygroundType {
+  CQB = 'CQB',
+  FOREST = 'FOREST',
+  BUILDING = 'BUILDING',
+  SPEEDSOFT = 'SPEEDSOFT',
+}
+
+export const PlaygroundTypeEnum = ENUM({
+  name: 'FieldTypeEnum', // Enum suffix because we have a model already called FieldType
+  values: PlaygroundType,
+});
