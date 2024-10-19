@@ -36,7 +36,7 @@ export const ReportableResourceEnum = ENUM({
 export enum PlaygroundType {
   CQB = 'CQB',
   Forest = 'Forest',
-  Building = 'Building',
+  Buildings = 'Buildings',
   Speedsoft = 'Speedsoft',
 }
 
