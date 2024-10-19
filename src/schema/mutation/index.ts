@@ -5,6 +5,7 @@ import Club from './Club';
 import Field from './Field';
 import Event from './Event';
 import Report from './Report';
+import User from './User';
 
 export default new GraphQLObjectType({
   name: 'Mutation',
@@ -14,5 +15,6 @@ export default new GraphQLObjectType({
     field: scopedField(Field),
     event: scopedField(Event),
     report: scopedField(Report),
+    user: scopedField(User),
   },
 });
