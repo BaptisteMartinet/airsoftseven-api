@@ -245,10 +245,10 @@ type FieldPlaygroundType {
   id: ID!
   createdAt: Date!
   updatedAt: Date!
-  type: FieldTypeEnum!
+  type: PlaygroundType!
 }
 
-enum FieldTypeEnum {
+enum PlaygroundType {
   CQB
   FOREST
   BUILDING
@@ -268,21 +268,21 @@ enum FieldPlaygroundTypeFields {
 
 """The FieldPlaygroundType model filters"""
 input FieldPlaygroundTypeFilters {
-  type: FieldTypeEnumFilters
+  type: PlaygroundTypeFilters
 }
 
-input FieldTypeEnumFilters {
+input PlaygroundTypeFilters {
   """Equal"""
-  eq: FieldTypeEnum
+  eq: PlaygroundType
 
   """Not equal"""
-  ne: FieldTypeEnum
+  ne: PlaygroundType
 
   """In"""
-  in: [FieldTypeEnum!]
+  in: [PlaygroundType!]
 
   """Not in"""
-  notIn: [FieldTypeEnum!]
+  notIn: [PlaygroundType!]
 }
 
 input ClubOrderBy {
@@ -458,7 +458,7 @@ input FieldCreateInput {
   latitude: Float!
   longitude: Float!
   publicURL: String
-  playgroundTypes: [FieldTypeEnum!]
+  playgroundTypes: [PlaygroundType!]
 }
 
 type EventMutation {
