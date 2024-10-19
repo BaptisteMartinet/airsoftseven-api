@@ -26,7 +26,7 @@ export default new GraphQLObjectType<unknown, Context>({
     },
 
     register: {
-      type: new GraphQLNonNull(GraphQLBoolean),
+      type: new GraphQLNonNull(Session.type),
       args: {
         code: { type: new GraphQLNonNull(GraphQLString) },
         username: { type: new GraphQLNonNull(GraphQLString) },
@@ -39,14 +39,16 @@ export default new GraphQLObjectType<unknown, Context>({
         await ensureVerificationCode(email, code);
         if (await User.exists({ where: { email } })) throw new Error('Email already taken'); // TODO custom error
         const passwordHash = hashPassword(password);
-        await User.model.create({
+        const user = await User.model.create({
           username,
           email,
           passwordHash,
           newsletterOptIn,
           ...(await genSlug(username, User)),
         });
-        return true;
+        const session = await createSession(user);
+        setSessionCookie(session, ctx);
+        return session;
       },
     },
 
