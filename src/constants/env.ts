@@ -11,4 +11,4 @@ export const __DOMAIN_FULL__ = `https://${__DOMAIN__}`;
 
 export const __ENV__ = ensureEnvString('NODE_ENV');
 export const __PROD__ = __ENV__ === 'production';
-export const __DEV__ = __ENV__ === 'dev';
+export const __DEV__ = !__PROD__;
