@@ -251,7 +251,7 @@ type FieldPlaygroundType {
 enum PlaygroundType {
   CQB
   Forest
-  Building
+  Buildings
   Speedsoft
 }
 
