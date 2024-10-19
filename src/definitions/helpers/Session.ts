@@ -1,8 +1,8 @@
 import type { Context } from '@/context';
 
 import { attachMemoizerArgsFormatter } from '@sequelize-graphql/core';
-import { Session, User } from '@definitions/models';
 import { AuthRequired } from '@utils/errors';
+import { Session, User } from '@definitions/models';
 
 export async function ensureSession(ctx: Context) {
   const { sessionId } = ctx;
@@ -14,16 +14,19 @@ export async function ensureSession(ctx: Context) {
   return session;
 }
 
-async function _ensureSessionUser(ctx: Context) {
-  const session = await ensureSession(ctx);
+async function _getSessionUser(ctx: Context) {
+  const session = await ensureSession(ctx).catch(() => null);
+  if (!session) return null;
   return User.ensureExistence(session.userId, { ctx });
 }
-attachMemoizerArgsFormatter(_ensureSessionUser, ([ctx]) => ctx.sessionId ?? '');
+attachMemoizerArgsFormatter(_getSessionUser, ([ctx]) => ctx.sessionId ?? '');
 
-export async function ensureSessionUser(ctx: Context) {
-  return ctx.memoized(_ensureSessionUser, ctx);
+export function getSessionUser(ctx: Context) {
+  return ctx.memoized(_getSessionUser, ctx);
 }
 
-export async function getSessionUser(ctx: Context) {
-  return ensureSessionUser(ctx).catch((err) => null);
+export async function ensureSessionUser(ctx: Context) {
+  const user = await getSessionUser(ctx);
+  if (!user) throw new AuthRequired('AuthRequired');
+  return user;
 }
