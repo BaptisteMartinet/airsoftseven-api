@@ -63,7 +63,7 @@ export default new GraphQLObjectType<unknown, Context>({
         if (!passwordMatch) throw new Error('Email or password is invalid'); // TODO custom error
         if (user.bannedAt) throw new UserBanned();
 
-        const session = await createSession(user.id);
+        const session = await createSession(user);
         setSessionCookie(session, ctx);
         return session;
       },

@@ -43,11 +43,11 @@ export async function ensureSessionUser(ctx: Context) {
 
 const SessionActiveDays = 30;
 
-export async function createSession(userId: IdType) {
+export async function createSession(user: { id: IdType }) {
   const now = new Date();
   const expireAt = new Date(now.getTime() + Day * SessionActiveDays);
   return Session.model.create({
-    userId,
+    userId: user.id,
     expireAt,
     usedAt: now,
   });
