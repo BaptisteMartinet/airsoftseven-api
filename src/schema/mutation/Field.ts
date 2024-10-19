@@ -27,12 +27,14 @@ export default genModelMutations(Field, {
         authorId: user.id,
         ...(await genSlug(name, Field)),
       });
-      await FieldPlaygroundType.model.bulkCreate(
-        playgroundTypes.map((playgroundType: PlaygroundType) => ({
-          fieldId: field.id,
-          type: playgroundType,
-        })),
-      );
+      if (playgroundTypes.length > 0) {
+        await FieldPlaygroundType.model.bulkCreate(
+          playgroundTypes.map((playgroundType: PlaygroundType) => ({
+            fieldId: field.id,
+            type: playgroundType,
+          })),
+        );
+      }
       return field;
     },
   },
