@@ -5,6 +5,7 @@ import { differenceInMilliseconds } from 'date-fns';
 import { genSlug } from '@sequelize-graphql/core';
 import { hashPassword, comparePassword } from '@utils/password';
 import { Day } from '@utils/time';
+import { UserBanned } from '@/utils/errors';
 import { __PROD__, __DOMAIN__ } from '@constants/env';
 import { Session, User } from '@definitions/models';
 import { ensureSession } from '@definitions/helpers/Session';
@@ -63,6 +64,7 @@ export default new GraphQLObjectType<unknown, Context>({
         const user = await User.model.findOne({ where: { email } });
         const passwordMatch = comparePassword(password, user?.passwordHash ?? '') && user !== null;
         if (!passwordMatch) throw new Error('Email or password is invalid'); // TODO custom error
+        if (user.bannedAt) throw new UserBanned();
 
         const now = new Date();
         const expireAt = new Date(now.getTime() + Day * 30);

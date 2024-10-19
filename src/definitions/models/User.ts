@@ -1,7 +1,7 @@
 import type { CreationOptional } from 'sequelize';
 import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { Model, STRING, BOOLEAN } from '@sequelize-graphql/core';
+import { Model, STRING, BOOLEAN, DATE } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { UserRoleEnum, UserRole } from '@definitions/enums';
 import { Club, Event, Field, Report, Session, UserReport } from '@definitions/models';
@@ -14,6 +14,7 @@ export interface UserModel extends SlugColumnsT, InferModelAttributesWithDefault
   passwordHash: string;
   newsletterOptIn: CreationOptional<boolean>;
   role: UserRole | null;
+  bannedAt: Date | null;
 }
 
 const User: Model<UserModel> = new Model({
@@ -24,6 +25,7 @@ const User: Model<UserModel> = new Model({
     passwordHash: { type: STRING, allowNull: false, exposed: false },
     newsletterOptIn: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: false },
     role: { type: UserRoleEnum, allowNull: true, exposed: false },
+    bannedAt: { type: DATE, allowNull: true, exposed: false },
 
     ...SlugColumns,
   },
