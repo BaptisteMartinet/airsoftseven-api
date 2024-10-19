@@ -94,6 +94,7 @@ type Field {
   slug: String!
   author: User
   events(offset: Int, limit: Int, order: [EventOrderBy!], filters: EventFilters): EventOffsetConnection!
+  playgroundTypes(offset: Int, limit: Int, order: [FieldPlaygroundTypeOrderBy!], filters: FieldPlaygroundTypeFilters): FieldPlaygroundTypeOffsetConnection!
   reported: Boolean
 }
 
@@ -233,6 +234,55 @@ input FloatFilters {
 
   """Greater than or equal"""
   gte: Float
+}
+
+type FieldPlaygroundTypeOffsetConnection {
+  nodes: [FieldPlaygroundType!]
+  count: Int!
+}
+
+type FieldPlaygroundType {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  type: FieldTypeEnum!
+}
+
+enum FieldTypeEnum {
+  CQB
+  FOREST
+  BUILDING
+  SPEEDSOFT
+}
+
+input FieldPlaygroundTypeOrderBy {
+  field: FieldPlaygroundTypeFields!
+  ordering: OrderType!
+}
+
+enum FieldPlaygroundTypeFields {
+  type
+  createdAt
+  updatedAt
+}
+
+"""The FieldPlaygroundType model filters"""
+input FieldPlaygroundTypeFilters {
+  type: FieldTypeEnumFilters
+}
+
+input FieldTypeEnumFilters {
+  """Equal"""
+  eq: FieldTypeEnum
+
+  """Not equal"""
+  ne: FieldTypeEnum
+
+  """In"""
+  in: [FieldTypeEnum!]
+
+  """Not in"""
+  notIn: [FieldTypeEnum!]
 }
 
 input ClubOrderBy {
@@ -407,6 +457,7 @@ input FieldCreateInput {
   latitude: Float!
   longitude: Float!
   publicURL: String
+  playgroundTypes: [FieldTypeEnum!]
 }
 
 type EventMutation {
