@@ -44,3 +44,14 @@ export const PlaygroundTypeEnum = ENUM({
   name: 'FieldTypeEnum', // Enum suffix because we have a model already called FieldType
   values: PlaygroundType,
 });
+
+// Theses are global roles. Specific roles for Fields and Clubs will be added later.
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  MODERATOR = 'MODERATOR',
+}
+
+export const UserRoleEnum = ENUM({
+  name: 'UserRole',
+  values: UserRole,
+});
