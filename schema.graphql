@@ -250,9 +250,9 @@ type FieldPlaygroundType {
 
 enum PlaygroundType {
   CQB
-  FOREST
-  BUILDING
-  SPEEDSOFT
+  Forest
+  Building
+  Speedsoft
 }
 
 input FieldPlaygroundTypeOrderBy {
