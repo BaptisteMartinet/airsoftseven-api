@@ -7,15 +7,6 @@ import { Event, User, ClubReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 import fields from '@schema/model/Club';
 
-/**
- * TODO Gerer les points suivants
- * - Style de jeu pratiqués
- * - Siege social
- * - Nombre de membres
- * - Président
- * - Type d'assurance
- */
-
 export interface ClubModel extends SlugColumnsT, InferModelAttributesWithDefaults<ClubModel> {
   name: string;
   description: string | null;
