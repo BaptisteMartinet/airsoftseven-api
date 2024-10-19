@@ -41,7 +41,7 @@ export enum PlaygroundType {
 }
 
 export const PlaygroundTypeEnum = ENUM({
-  name: 'FieldTypeEnum', // Enum suffix because we have a model already called FieldType
+  name: 'PlaygroundType',
   values: PlaygroundType,
 });
 
