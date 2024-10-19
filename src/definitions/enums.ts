@@ -35,9 +35,9 @@ export const ReportableResourceEnum = ENUM({
 
 export enum PlaygroundType {
   CQB = 'CQB',
-  FOREST = 'FOREST',
-  BUILDING = 'BUILDING',
-  SPEEDSOFT = 'SPEEDSOFT',
+  Forest = 'Forest',
+  Building = 'Building',
+  Speedsoft = 'Speedsoft',
 }
 
 export const PlaygroundTypeEnum = ENUM({
@@ -47,8 +47,8 @@ export const PlaygroundTypeEnum = ENUM({
 
 // Theses are global roles. Specific roles for Fields and Clubs will be added later.
 export enum UserRole {
-  ADMIN = 'ADMIN',
-  MODERATOR = 'MODERATOR',
+  Admin = 'Admin',
+  Moderator = 'Moderator',
 }
 
 export const UserRoleEnum = ENUM({
