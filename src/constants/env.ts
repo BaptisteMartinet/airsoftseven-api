@@ -1,6 +1,7 @@
-import { ensureEnvInt, ensureEnvString } from '@utils/env';
+import { ensureEnvBool, ensureEnvInt, ensureEnvString } from '@utils/env';
 
 export const __DATABASE_URL__ = ensureEnvString('DATABASE_URL');
+export const __DISABLE_DB_LOGGING__ = ensureEnvBool('DISABLE_DB_LOGGING');
 export const __JWT_SECRET_KEY__ = ensureEnvString('JWT_SECRET_KEY');
 export const __COOKIES_SECRET_KEY__ = ensureEnvString('COOKIES_SECRET_KEY');
 export const __SENDGRID_API_KEY__ = ensureEnvString('SENDGRID_API_KEY');
