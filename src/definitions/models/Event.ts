@@ -1,4 +1,4 @@
-import type { ForeignKey } from 'sequelize';
+import type { CreationOptional, ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
 import { Model, DATE, STRING, FLOAT, INTEGER, TEXT } from '@sequelize-graphql/core';
@@ -11,7 +11,7 @@ export interface EventModel extends SlugColumnsT, InferModelAttributesWithDefaul
   title: string;
   description: string | null;
   date: Date;
-  durationDays: number;
+  durationDays: CreationOptional<number>;
   price: number | null;
   capacity: number | null;
   publicURL: string | null;
