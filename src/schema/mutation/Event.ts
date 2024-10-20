@@ -4,19 +4,7 @@ import { InvalidPermissions } from '@/utils/errors';
 import { ensureNotSpam } from '@/utils/model';
 import { Event, Club, Field } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
-
-async function genEventSlug({
-  eventTitle,
-  clubName,
-  fieldName,
-}: {
-  eventTitle: string;
-  clubName: string;
-  fieldName: string;
-}) {
-  const slugBase = [eventTitle, clubName, fieldName].join('-');
-  return genSlug(slugBase, Event);
-}
+import { genEventSlug } from '@/definitions/helpers/Event';
 
 export default genModelMutations(Event, {
   create: {
