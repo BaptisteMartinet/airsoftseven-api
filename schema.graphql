@@ -77,6 +77,7 @@ type Event {
   author: User
   club: Club
   field: Field
+  gamemodes(offset: Int, limit: Int, order: [EventGamemodeOrderBy!], filters: EventGamemodeFilters): EventGamemodeOffsetConnection!
   reported: Boolean
 }
 
@@ -285,6 +286,55 @@ input PlaygroundTypeFilters {
   notIn: [PlaygroundType!]
 }
 
+type EventGamemodeOffsetConnection {
+  nodes: [EventGamemode!]
+  count: Int!
+}
+
+type EventGamemode {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+  type: EventGamemodeType!
+}
+
+enum EventGamemodeType {
+  MilSim
+  Nocturnal
+  Speedsoft
+  Skirmish
+}
+
+input EventGamemodeOrderBy {
+  field: EventGamemodeFields!
+  ordering: OrderType!
+}
+
+enum EventGamemodeFields {
+  type
+  createdAt
+  updatedAt
+}
+
+"""The EventGamemode model filters"""
+input EventGamemodeFilters {
+  type: EventGamemodeTypeFilters
+}
+
+input EventGamemodeTypeFilters {
+  """Equal"""
+  eq: EventGamemodeType
+
+  """Not equal"""
+  ne: EventGamemodeType
+
+  """In"""
+  in: [EventGamemodeType!]
+
+  """Not in"""
+  notIn: [EventGamemodeType!]
+}
+
 input ClubOrderBy {
   field: ClubFields!
   ordering: OrderType!
@@ -464,6 +514,7 @@ input FieldCreateInput {
 type EventMutation {
   create(input: EventCreateInput!): Event!
   delete(id: ID!): Boolean!
+  setInterest(id: ID!): Event
 }
 
 input EventCreateInput {
@@ -474,6 +525,7 @@ input EventCreateInput {
   price: Float
   capacity: Int
   publicURL: String
+  gamemodes: [EventGamemodeType!]
   clubId: ID!
   fieldId: ID!
 }
