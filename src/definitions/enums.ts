@@ -55,3 +55,15 @@ export const UserRoleEnum = ENUM({
   name: 'UserRole',
   values: UserRole,
 });
+
+export enum EventGamemodeType {
+  MilSim = 'MilSim',
+  Nocturnal = 'Nocturnal',
+  Speedsoft = 'Speedsoft',
+  Skirmish = 'Skirmish',
+}
+
+export const EventGamemodeTypeEnum = ENUM({
+  name: 'EventGamemodeType',
+  values: EventGamemodeType,
+});

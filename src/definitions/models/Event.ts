@@ -3,7 +3,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 
 import { Model, DATE, STRING, FLOAT, INTEGER, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { User, Club, Field, EventReport } from '@definitions/models';
+import { User, Club, Field, EventReport, EventGamemode } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 import fields from '@schema/model/Event';
 
@@ -50,6 +50,12 @@ const Event: Model<EventModel> = new Model({
     field: {
       model: Field,
       type: 'belongsTo',
+      exposed: true,
+    },
+    gamemodes: {
+      model: EventGamemode,
+      type: 'hasMany',
+      deleteCascade: true,
       exposed: true,
     },
     reports: {
