@@ -1,5 +1,5 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
-import { genModelMutations, GraphQLDate, genSlug } from '@sequelize-graphql/core';
+import { genModelMutations, GraphQLDate } from '@sequelize-graphql/core';
 import { InvalidPermissions } from '@/utils/errors';
 import { ensureNotSpam } from '@/utils/model';
 import { Event, Club, Field } from '@definitions/models';
