@@ -13,6 +13,7 @@ export default genModelMutations(Event, {
       title: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: GraphQLString },
       date: { type: new GraphQLNonNull(GraphQLDate) },
+      dateTzOffset: { type: new GraphQLNonNull(GraphQLInt) },
       durationDays: { type: GraphQLInt },
       price: { type: GraphQLFloat },
       capacity: { type: GraphQLInt },

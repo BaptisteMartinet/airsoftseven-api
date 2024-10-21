@@ -141,6 +141,8 @@ async function createEvents(rawEvents: Array<EventT>) {
   const ctx = makeContext();
   const user = await User.ensureExistence(BaptisteId, { ctx });
   const club = await Club.ensureExistence(WildTriggerClubId, { ctx });
+  const now = new Date();
+  const dateTzOffset = now.getTimezoneOffset();
 
   const unknownFieldNames: Array<string> = [];
   let existingEventsCount = 0;
@@ -180,6 +182,7 @@ async function createEvents(rawEvents: Array<EventT>) {
       slugBase,
       title,
       date,
+      dateTzOffset,
       durationDays,
       price,
       capacity,

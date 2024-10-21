@@ -11,6 +11,7 @@ export interface EventModel extends SlugColumnsT, InferModelAttributesWithDefaul
   title: string;
   description: string | null;
   date: Date;
+  dateTzOffset: number;
   durationDays: CreationOptional<number>;
   price: number | null;
   capacity: number | null;
@@ -27,6 +28,7 @@ const Event: Model<EventModel> = new Model({
     title: { type: STRING, allowNull: false, exposed: true },
     description: { type: TEXT, allowNull: true, exposed: true },
     date: { type: DATE, allowNull: false, exposed: true },
+    dateTzOffset: { type: INTEGER, allowNull: false, exposed: true },
     durationDays: { type: INTEGER, allowNull: false, defaultValue: 1, exposed: true },
     price: { type: FLOAT, allowNull: true, exposed: true },
     capacity: { type: INTEGER, allowNull: true, exposed: true },
