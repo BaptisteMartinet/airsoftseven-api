@@ -4,7 +4,7 @@ import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 import { Model, STRING, BOOLEAN, DATE } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { UserRoleEnum, UserRole } from '@definitions/enums';
-import { Club, Event, Field, Report, Session, UserReport } from '@definitions/models';
+import { Club, Event, EventInterest, Field, Report, Session, UserReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 import fields from '@schema/model/User';
 
@@ -64,6 +64,12 @@ const User: Model<UserModel> = new Model({
     userReports: {
       model: UserReport,
       type: 'hasMany',
+      exposed: false,
+    },
+    eventsInterests: {
+      model: EventInterest,
+      type: 'hasMany',
+      deleteCascade: true,
       exposed: false,
     },
   }),

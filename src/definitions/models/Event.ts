@@ -3,7 +3,7 @@ import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphq
 
 import { Model, DATE, STRING, FLOAT, INTEGER, TEXT } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
-import { User, Club, Field, EventReport, EventGamemode } from '@definitions/models';
+import { User, Club, Field, EventReport, EventGamemode, EventInterest } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
 import fields from '@schema/model/Event';
 
@@ -61,6 +61,12 @@ const Event: Model<EventModel> = new Model({
     reports: {
       model: EventReport,
       type: 'hasMany',
+      exposed: false,
+    },
+    interests: {
+      model: EventInterest,
+      type: 'hasMany',
+      deleteCascade: true,
       exposed: false,
     },
   }),

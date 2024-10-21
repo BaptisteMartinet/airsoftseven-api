@@ -1,9 +1,9 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
 import { genModelMutations, GraphQLDate, GraphQLNonNullList } from '@sequelize-graphql/core';
-import { InvalidPermissions } from '@/utils/errors';
+import { ClientError, InvalidPermissions } from '@/utils/errors';
 import { ensureNotSpam } from '@/utils/model';
 import { EventGamemodeTypeEnum, type EventGamemodeType } from '@definitions/enums';
-import { Event, Club, Field, EventGamemode } from '@definitions/models';
+import { Event, Club, Field, EventGamemode, EventInterest } from '@definitions/models';
 import { ensureSessionUser } from '@definitions/helpers/Session';
 import { genEventSlug } from '@/definitions/helpers/Event';
 
@@ -58,4 +58,27 @@ export default genModelMutations(Event, {
       await event.destroy();
     },
   },
+
+  fields: () => ({
+    setInterest: {
+      type: Event.type,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(_, args, ctx) {
+        const { id } = args;
+        const user = await ensureSessionUser(ctx);
+        const event = await Event.ensureExistence(id, { ctx });
+        const alreadyInterested = await EventInterest.exists({
+          where: { userId: user.id, eventId: event.id },
+        });
+        if (alreadyInterested) throw new ClientError('AlreadyInterested', 'AlreadyInterested');
+        await EventInterest.model.create({
+          eventId: event.id,
+          userId: user.id,
+        });
+        return event;
+      },
+    },
+  }),
 });

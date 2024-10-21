@@ -5,6 +5,7 @@ export { default as Field, type FieldModel } from './Field';
 export { default as FieldPlaygroundType } from './FieldPlaygroundType';
 export { default as Event, type EventModel } from './Event';
 export { default as EventGamemode } from './EventGamemode';
+export { default as EventInterest } from './EventInterest';
 export { default as EmailVerificationCode, type EmailVerificationCodeModel } from './EmailVerificationCode';
 export { default as Report } from './Report';
 export { default as ClubReport } from './ClubReport';
