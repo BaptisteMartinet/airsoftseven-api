@@ -6,7 +6,7 @@ import sequelize from '@db/index';
 export interface EmailVerificationCodeModel extends InferModelAttributesWithDefaults<EmailVerificationCodeModel> {
   email: string;
   code: string;
-  expireAt: Date;
+  expiredAt: Date;
 }
 
 const EmailVerificationCode: Model<EmailVerificationCodeModel> = new Model({
@@ -14,8 +14,9 @@ const EmailVerificationCode: Model<EmailVerificationCodeModel> = new Model({
   columns: {
     email: { type: STRING, allowNull: false, exposed: false },
     code: { type: STRING, allowNull: false, exposed: false },
-    expireAt: { type: DATE, allowNull: false, exposed: false },
+    expiredAt: { type: DATE, allowNull: false, exposed: false },
   },
+  indexes: [{ fields: ['email', 'code'], unique: true }],
   sequelize,
 });
 

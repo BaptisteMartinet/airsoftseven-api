@@ -4,10 +4,11 @@ import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from
 import { genSlug } from '@sequelize-graphql/core';
 import { hashPassword, comparePassword } from '@utils/password';
 import { UserBanned } from '@/utils/errors';
+import { Hour, Minute } from '@/utils/time';
 import { Session, User } from '@definitions/models';
 import { createSession, ensureSession, setSessionCookie } from '@definitions/helpers/Session';
 import { createVerificationCode, ensureVerificationCode } from '@definitions/helpers/EmailVerification';
-import { onVerifyEmail } from '@notifications/dispatchers';
+import { onVerifyEmail, onForgotPassword } from '@notifications/dispatchers';
 
 export default new GraphQLObjectType<unknown, Context>({
   name: 'SessionMutation',
@@ -19,7 +20,7 @@ export default new GraphQLObjectType<unknown, Context>({
       },
       async resolve(_, args, ctx) {
         const { email } = args;
-        const code = await createVerificationCode(email);
+        const code = await createVerificationCode({ email, len: 6, expireInMs: 1 * Hour });
         await onVerifyEmail({ email, code }, ctx);
         return true;
       },
@@ -81,7 +82,37 @@ export default new GraphQLObjectType<unknown, Context>({
       },
     },
 
-    // forgotPassword: {},
-    // resetPassword: {},
+    forgotPassword: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(_, args, ctx) {
+        const { email } = args;
+        const userExists = await User.exists({ where: { email } });
+        if (!userExists) return true;
+        const code = await createVerificationCode({ email, len: 12, expireInMs: 15 * Minute });
+        await onForgotPassword({ email, code }, ctx);
+        return true;
+      },
+    },
+
+    resetPassword: {
+      type: new GraphQLNonNull(GraphQLBoolean),
+      args: {
+        code: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        newPassword: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(_, args, ctx) {
+        const { code, email, newPassword } = args;
+        await ensureVerificationCode(email, code);
+        const passwordHash = hashPassword(newPassword);
+        const user = await User.model.findOne({ where: { email } });
+        if (!user) return true;
+        await user.update({ passwordHash });
+        return true;
+      },
+    },
   }),
 });
