@@ -81,5 +81,23 @@ export default genModelMutations(Event, {
         return event;
       },
     },
+
+    removeInterest: {
+      type: Event.type,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(_, args, ctx) {
+        const { id } = args;
+        const user = await ensureSessionUser(ctx);
+        const event = await Event.ensureExistence(id, { ctx });
+        const interest = await EventInterest.model.findOne({
+          where: { userId: user.id, eventId: event.id },
+        });
+        if (!interest) throw new ClientError('NoInterestFound', 'NoInterestFound');
+        await interest.destroy();
+        return event;
+      },
+    },
   }),
 });
