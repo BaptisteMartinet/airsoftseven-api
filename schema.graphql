@@ -79,6 +79,7 @@ type Event {
   club: Club
   field: Field
   gamemodes(offset: Int, limit: Int, order: [EventGamemodeOrderBy!], filters: EventGamemodeFilters): EventGamemodeOffsetConnection!
+  interests(offset: Int, limit: Int, order: [EventInterestOrderBy!], filters: EventInterestFilters): EventInterestOffsetConnection!
   reported: Boolean
   interested: Boolean
 }
@@ -138,6 +139,8 @@ input EventFilters {
   publicURL: StringFilters
   slugBase: StringFilters
   slug: StringFilters
+  createdAt: DateFilters
+  updatedAt: DateFilters
 }
 
 input StringFilters {
@@ -274,6 +277,8 @@ enum FieldPlaygroundTypeFields {
 """The FieldPlaygroundType model filters"""
 input FieldPlaygroundTypeFilters {
   type: PlaygroundTypeFilters
+  createdAt: DateFilters
+  updatedAt: DateFilters
 }
 
 input PlaygroundTypeFilters {
@@ -323,6 +328,8 @@ enum EventGamemodeFields {
 """The EventGamemode model filters"""
 input EventGamemodeFilters {
   type: EventGamemodeTypeFilters
+  createdAt: DateFilters
+  updatedAt: DateFilters
 }
 
 input EventGamemodeTypeFilters {
@@ -337,6 +344,33 @@ input EventGamemodeTypeFilters {
 
   """Not in"""
   notIn: [EventGamemodeType!]
+}
+
+type EventInterestOffsetConnection {
+  nodes: [EventInterest!]
+  count: Int!
+}
+
+type EventInterest {
+  id: ID!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+input EventInterestOrderBy {
+  field: EventInterestFields!
+  ordering: OrderType!
+}
+
+enum EventInterestFields {
+  createdAt
+  updatedAt
+}
+
+"""The EventInterest model filters"""
+input EventInterestFilters {
+  createdAt: DateFilters
+  updatedAt: DateFilters
 }
 
 input ClubOrderBy {
@@ -367,6 +401,8 @@ input ClubFilters {
   acceptUnderage: BooleanFilters
   slugBase: StringFilters
   slug: StringFilters
+  createdAt: DateFilters
+  updatedAt: DateFilters
 }
 
 input BooleanFilters {
@@ -416,6 +452,8 @@ input FieldFilters {
   publicURL: StringFilters
   slugBase: StringFilters
   slug: StringFilters
+  createdAt: DateFilters
+  updatedAt: DateFilters
 }
 
 type ReportOffsetConnection {
@@ -454,6 +492,8 @@ enum ReportFields {
 input ReportFilters {
   reason: ReportReasonFilters
   message: StringFilters
+  createdAt: DateFilters
+  updatedAt: DateFilters
 }
 
 input ReportReasonFilters {
@@ -521,6 +561,7 @@ type EventMutation {
   create(input: EventCreateInput!): Event!
   delete(id: ID!): Boolean!
   setInterest(id: ID!): Event
+  removeInterest(id: ID!): Event
 }
 
 input EventCreateInput {
