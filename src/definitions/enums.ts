@@ -67,3 +67,13 @@ export const EventGamemodeTypeEnum = ENUM({
   name: 'EventGamemodeType',
   values: EventGamemodeType,
 });
+
+export enum EmailVerificationCodeType {
+  Register = 'Register',
+  ResetPassword = 'ResetPassword',
+}
+
+export const EmailVerificationCodeTypeEnum = ENUM({
+  name: 'EmailVerificationCodeType',
+  values: EmailVerificationCodeType,
+});

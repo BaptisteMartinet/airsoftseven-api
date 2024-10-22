@@ -6,6 +6,7 @@ import { hashPassword, comparePassword } from '@utils/password';
 import { UserBanned } from '@/utils/errors';
 import { Hour, Minute } from '@/utils/time';
 import { Session, User } from '@definitions/models';
+import { EmailVerificationCodeType } from '@definitions/enums';
 import { createSession, ensureSession, setSessionCookie } from '@definitions/helpers/Session';
 import { createVerificationCode, ensureVerificationCode } from '@definitions/helpers/EmailVerification';
 import { onVerifyEmail, onForgotPassword } from '@notifications/dispatchers';
@@ -20,7 +21,12 @@ export default new GraphQLObjectType<unknown, Context>({
       },
       async resolve(_, args, ctx) {
         const { email } = args;
-        const code = await createVerificationCode({ email, len: 6, expireInMs: 1 * Hour });
+        const code = await createVerificationCode({
+          email,
+          type: EmailVerificationCodeType.Register,
+          len: 6,
+          expireInMs: 1 * Hour,
+        });
         await onVerifyEmail({ email, code }, ctx);
         return true;
       },
@@ -37,7 +43,7 @@ export default new GraphQLObjectType<unknown, Context>({
       },
       async resolve(_, args, ctx) {
         const { code, username, email, password, newsletterOptIn } = args;
-        await ensureVerificationCode(email, code);
+        await ensureVerificationCode({ email, code, type: EmailVerificationCodeType.Register });
         if (await User.exists({ where: { email } })) throw new Error('Email already taken'); // TODO custom error
         const passwordHash = hashPassword(password);
         const user = await User.model.create({
@@ -91,7 +97,12 @@ export default new GraphQLObjectType<unknown, Context>({
         const { email } = args;
         const userExists = await User.exists({ where: { email } });
         if (!userExists) return true;
-        const code = await createVerificationCode({ email, len: 12, expireInMs: 15 * Minute });
+        const code = await createVerificationCode({
+          email,
+          type: EmailVerificationCodeType.ResetPassword,
+          len: 12,
+          expireInMs: 15 * Minute,
+        });
         await onForgotPassword({ email, code }, ctx);
         return true;
       },
@@ -106,7 +117,7 @@ export default new GraphQLObjectType<unknown, Context>({
       },
       async resolve(_, args, ctx) {
         const { code, email, newPassword } = args;
-        await ensureVerificationCode(email, code);
+        await ensureVerificationCode({ email, code, type: EmailVerificationCodeType.ResetPassword });
         const passwordHash = hashPassword(newPassword);
         const user = await User.model.findOne({ where: { email } });
         if (!user) return true;
