@@ -7,7 +7,7 @@ import { UserBanned } from '@/utils/errors';
 import { Hour, Minute } from '@/utils/time';
 import { Session, User } from '@definitions/models';
 import { EmailVerificationCodeType } from '@definitions/enums';
-import { createSession, ensureSession, setSessionCookie } from '@definitions/helpers/Session';
+import { closeSession, createSession, ensureSession, setSessionCookie } from '@definitions/helpers/Session';
 import { createVerificationCode, ensureVerificationCode } from '@definitions/helpers/EmailVerification';
 import { onVerifyEmail, onForgotPassword } from '@notifications/dispatchers';
 
@@ -82,8 +82,7 @@ export default new GraphQLObjectType<unknown, Context>({
       type: new GraphQLNonNull(GraphQLBoolean),
       async resolve(_, args, ctx) {
         const session = await ensureSession(ctx);
-        await session.update({ closedAt: new Date() });
-        ctx.res.clearCookie('session');
+        await closeSession(session, ctx);
         return true;
       },
     },

@@ -68,3 +68,9 @@ export function setSessionCookie(session: SessionModel, ctx: Context) {
     domain: __PROD__ ? `.${__DOMAIN__}` : '',
   });
 }
+
+export async function closeSession(session: SessionModel, ctx: Context) {
+  const now = new Date();
+  await session.update({ closedAt: now });
+  ctx.res.clearCookie(SessionCookieName);
+}
