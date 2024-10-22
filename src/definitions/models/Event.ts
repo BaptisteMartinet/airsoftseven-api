@@ -69,7 +69,7 @@ const Event: Model<EventModel> = new Model({
       model: EventInterest,
       type: 'hasMany',
       deleteCascade: true,
-      exposed: false,
+      exposed: true,
     },
   }),
   sequelize,
