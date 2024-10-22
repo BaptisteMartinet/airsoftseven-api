@@ -7,7 +7,13 @@ import { UserBanned } from '@/utils/errors';
 import { Hour, Minute } from '@/utils/time';
 import { Session, User } from '@definitions/models';
 import { EmailVerificationCodeType } from '@definitions/enums';
-import { closeSession, createSession, ensureSession, setSessionCookie } from '@definitions/helpers/Session';
+import {
+  closeAllSessions,
+  closeSession,
+  createSession,
+  ensureSession,
+  setSessionCookie,
+} from '@definitions/helpers/Session';
 import { createVerificationCode, ensureVerificationCode } from '@definitions/helpers/EmailVerification';
 import { onVerifyEmail, onForgotPassword } from '@notifications/dispatchers';
 
@@ -121,6 +127,7 @@ export default new GraphQLObjectType<unknown, Context>({
         const user = await User.model.findOne({ where: { email } });
         if (!user) return true;
         await user.update({ passwordHash });
+        await closeAllSessions(user.id);
         return true;
       },
     },

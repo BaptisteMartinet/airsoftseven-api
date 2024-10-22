@@ -74,3 +74,8 @@ export async function closeSession(session: SessionModel, ctx: Context) {
   await session.update({ closedAt: now });
   ctx.res.clearCookie(SessionCookieName);
 }
+
+export async function closeAllSessions(userId: IdType) {
+  const now = new Date();
+  await Session.model.update({ closedAt: now }, { where: { userId, closedAt: null } });
+}
