@@ -68,6 +68,7 @@ type Event {
   title: String!
   description: String
   date: Date!
+  dateTzOffset: Int!
   durationDays: Int!
   price: Float
   capacity: Int
@@ -79,6 +80,7 @@ type Event {
   field: Field
   gamemodes(offset: Int, limit: Int, order: [EventGamemodeOrderBy!], filters: EventGamemodeFilters): EventGamemodeOffsetConnection!
   reported: Boolean
+  interested: Boolean
 }
 
 type Field {
@@ -108,6 +110,7 @@ enum EventFields {
   title
   description
   date
+  dateTzOffset
   durationDays
   price
   capacity
@@ -128,6 +131,7 @@ input EventFilters {
   title: StringFilters
   description: StringFilters
   date: DateFilters
+  dateTzOffset: IntFilters
   durationDays: IntFilters
   price: FloatFilters
   capacity: IntFilters
@@ -480,6 +484,8 @@ type SessionMutation {
   register(code: String!, username: String!, email: String!, password: String!, newsletterOptIn: Boolean): Session!
   login(email: String!, password: String!): Session!
   logout: Boolean!
+  forgotPassword(email: String!): Boolean!
+  resetPassword(code: String!, email: String!, newPassword: String!): Boolean!
 }
 
 type ClubMutation {
@@ -521,6 +527,7 @@ input EventCreateInput {
   title: String!
   description: String
   date: Date!
+  dateTzOffset: Int!
   durationDays: Int
   price: Float
   capacity: Int
