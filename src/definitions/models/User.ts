@@ -1,7 +1,7 @@
 import type { CreationOptional } from 'sequelize';
 import type { InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { Model, STRING, BOOLEAN, DATE } from '@sequelize-graphql/core';
+import { Model, STRING, BOOLEAN, DATE, hasLength, isEmail } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { UserRoleEnum, UserRole } from '@definitions/enums';
 import { Club, Event, EventInterest, Field, Report, Session, UserReport } from '@definitions/models';
@@ -20,8 +20,8 @@ export interface UserModel extends SlugColumnsT, InferModelAttributesWithDefault
 const User: Model<UserModel> = new Model({
   name: 'User',
   columns: {
-    username: { type: STRING, allowNull: false, exposed: true },
-    email: { type: STRING, allowNull: false, exposed: false },
+    username: { type: STRING, allowNull: false, exposed: true, validate: hasLength({ min: 3, max: 64 }) },
+    email: { type: STRING, allowNull: false, exposed: false, validate: isEmail() },
     passwordHash: { type: STRING, allowNull: false, exposed: false },
     newsletterOptIn: { type: BOOLEAN, allowNull: false, defaultValue: false, exposed: false },
     role: { type: UserRoleEnum, allowNull: true, exposed: false },

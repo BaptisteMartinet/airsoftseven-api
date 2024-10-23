@@ -1,5 +1,5 @@
 import { GraphQLFloat, GraphQLID, GraphQLInt, GraphQLNonNull, GraphQLString } from 'graphql';
-import { genModelMutations, GraphQLDate, GraphQLNonNullList } from '@sequelize-graphql/core';
+import { genModelMutations, GraphQLDate, GraphQLNonNullList, validateModelFields } from '@sequelize-graphql/core';
 import { ClientError, InvalidPermissions } from '@/utils/errors';
 import { ensureNotSpam } from '@/utils/model';
 import { EventGamemodeTypeEnum, type EventGamemodeType } from '@definitions/enums';
@@ -26,6 +26,7 @@ export default genModelMutations(Event, {
       const { gamemodes, ...fields } = args;
       const { title, clubId, fieldId } = fields;
       const user = await ensureSessionUser(ctx);
+      validateModelFields(Event, fields);
       await ensureNotSpam(Event, user.id, { userIdColumn: 'authorId' });
       const [club, field] = await Promise.all([
         Club.ensureExistence(clubId, { ctx }),

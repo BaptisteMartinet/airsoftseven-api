@@ -1,5 +1,5 @@
 import { GraphQLBoolean, GraphQLNonNull, GraphQLString } from 'graphql';
-import { genModelMutations, genSlug } from '@sequelize-graphql/core';
+import { genModelMutations, genSlug, validateModelFields } from '@sequelize-graphql/core';
 import { ClientError, InvalidPermissions } from '@/utils/errors';
 import { ensureNotSpam } from '@/utils/model';
 import { Club, Event } from '@definitions/models';
@@ -18,6 +18,7 @@ export default genModelMutations(Club, {
     async resolve(_, args, ctx) {
       const fields = args;
       const { name } = fields;
+      validateModelFields(Club, fields);
       const user = await ensureSessionUser(ctx);
       await ensureNotSpam(Club, user.id, { userIdColumn: 'authorId' });
       return Club.model.create({

@@ -1,7 +1,7 @@
 import type { Context } from '@/context';
 
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { genSlug } from '@sequelize-graphql/core';
+import { genSlug, validateModelFields } from '@sequelize-graphql/core';
 import { hashPassword, comparePassword } from '@utils/password';
 import { UserBanned } from '@/utils/errors';
 import { Hour, Minute } from '@/utils/time';
@@ -49,6 +49,7 @@ export default new GraphQLObjectType<unknown, Context>({
       },
       async resolve(_, args, ctx) {
         const { code, username, email, password, newsletterOptIn } = args;
+        validateModelFields(User, { username, email });
         await ensureVerificationCode({ email, code, type: EmailVerificationCodeType.Register });
         if (await User.exists({ where: { email } })) throw new Error('Email already taken'); // TODO custom error
         const passwordHash = hashPassword(password);

@@ -1,7 +1,7 @@
 import type { CreationOptional, ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { Model, DATE, STRING, FLOAT, INTEGER, TEXT } from '@sequelize-graphql/core';
+import { Model, DATE, STRING, FLOAT, INTEGER, TEXT, hasLength, isDateBetween, isBetween } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { User, Club, Field, EventReport, EventGamemode, EventInterest } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
@@ -25,13 +25,13 @@ export interface EventModel extends SlugColumnsT, InferModelAttributesWithDefaul
 const Event: Model<EventModel> = new Model({
   name: 'Event',
   columns: {
-    title: { type: STRING, allowNull: false, exposed: true },
-    description: { type: TEXT, allowNull: true, exposed: true },
-    date: { type: DATE, allowNull: false, exposed: true },
+    title: { type: STRING, allowNull: false, exposed: true, validate: hasLength({ min: 3, max: 100 }) },
+    description: { type: TEXT, allowNull: true, exposed: true, validate: hasLength({ max: 2000 }) },
+    date: { type: DATE, allowNull: false, exposed: true, validate: isDateBetween({ relativeMinYears: 20, relativeMaxYears: 20 }) },
     dateTzOffset: { type: INTEGER, allowNull: false, exposed: true },
-    durationDays: { type: INTEGER, allowNull: false, defaultValue: 1, exposed: true },
-    price: { type: FLOAT, allowNull: true, exposed: true },
-    capacity: { type: INTEGER, allowNull: true, exposed: true },
+    durationDays: { type: INTEGER, allowNull: false, defaultValue: 1, exposed: true, validate: isBetween({ min: 1, max: 100 }) },
+    price: { type: FLOAT, allowNull: true, exposed: true, validate: isBetween({ min: 0 }) },
+    capacity: { type: INTEGER, allowNull: true, exposed: true, validate: isBetween({ min: 0 }) },
     publicURL: { type: STRING, allowNull: true, exposed: true },
 
     ...SlugColumns,

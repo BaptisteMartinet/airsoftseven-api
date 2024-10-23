@@ -1,5 +1,5 @@
 import { GraphQLFloat, GraphQLNonNull, GraphQLString } from 'graphql';
-import { genModelMutations, genSlug, GraphQLNonNullList } from '@sequelize-graphql/core';
+import { genModelMutations, genSlug, GraphQLNonNullList, validateModelFields } from '@sequelize-graphql/core';
 import { ClientError, InvalidPermissions } from '@/utils/errors';
 import { ensureNotSpam } from '@/utils/model';
 import { Field, Event, FieldPlaygroundType } from '@definitions/models';
@@ -20,6 +20,7 @@ export default genModelMutations(Field, {
     async resolve(_, args, ctx) {
       const { playgroundTypes, ...fields } = args;
       const { name } = fields;
+      validateModelFields(Field, fields);
       const user = await ensureSessionUser(ctx);
       await ensureNotSpam(Field, user.id, { userIdColumn: 'authorId' });
       const field = await Field.model.create({

@@ -1,7 +1,7 @@
 import type { ForeignKey } from 'sequelize';
 import type { IdType, InferModelAttributesWithDefaults } from '@sequelize-graphql/core';
 
-import { Model, STRING, BOOLEAN, TEXT } from '@sequelize-graphql/core';
+import { Model, STRING, BOOLEAN, TEXT, hasLength } from '@sequelize-graphql/core';
 import sequelize from '@db/index';
 import { Event, User, ClubReport } from '@definitions/models';
 import { SlugColumns, type SlugColumnsT } from '@definitions/models/shared';
@@ -21,10 +21,10 @@ export interface ClubModel extends SlugColumnsT, InferModelAttributesWithDefault
 const Club: Model<ClubModel> = new Model({
   name: 'Club',
   columns: {
-    name: { type: STRING, allowNull: false, exposed: true },
-    description: { type: TEXT, allowNull: true, exposed: true },
+    name: { type: STRING, allowNull: false, exposed: true, validate: hasLength({ min: 3, max: 64 }) },
+    description: { type: TEXT, allowNull: true, exposed: true, validate: hasLength({ max: 2000 }) },
     publicURL: { type: STRING, allowNull: true, exposed: true },
-    rules: { type: TEXT, allowNull: true, exposed: true },
+    rules: { type: TEXT, allowNull: true, exposed: true, validate: hasLength({ max: 2000 }) },
     rentals: { type: BOOLEAN, allowNull: true, exposed: true },
     acceptUnderage: { type: BOOLEAN, allowNull: true, exposed: true },
 
