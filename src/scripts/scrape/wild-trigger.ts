@@ -13,19 +13,19 @@ import { runWithDBAndHandleErrors } from '@scripts/common';
 const WildTriggerFieldsBaseURL = 'https://wildtrigger.com/categorie-produit/terrain';
 const SleepDelayBetweenPagesMs = 1 * Second;
 const SleepDelayBetweenDetailsPagesMs = 1 * Second;
-const BaptisteId = '120e6d2e-dae5-4cdd-b68d-4a0f2c90f1d8'; // TODO change
-const WildTriggerClubId = '96e4eed5-37a4-4f29-85d1-e34277a50ca8'; // TODO change
+const BaptisteId = '989cd57f-c6ab-4c60-9a3e-f4bc00ee4204';
+const WildTriggerClubId = '6f2358d3-edfa-4ad7-9950-e88802a100ba';
 
-// TODO update values
 const FieldsInfoPerFieldName = new Map<string, { id: IdType; capacity: number }>([
-  ['agency', { id: '6526deb3-34bb-4052-ae8e-711c7b348a0e', capacity: 60 }],
-  ['nordisk', { id: '0d015900-38f5-4728-9de3-d26dbbfcafdb', capacity: 40 }],
-  ['territory', { id: '9a9c26bf-821c-41ca-8a03-6cadc8b34c5c', capacity: 24 }],
-  ['new agency', { id: 'c4d56819-79a2-4d86-ac5a-c68cc2270e97', capacity: 240 }],
-  ['domain', { id: 'ca40c1da-0357-4f89-abc4-59ab9dad5f87', capacity: 150 }],
-  ['mosaïc', { id: '9ebb747f-6b65-450a-9378-520a1f51c80c', capacity: 50 }],
-  ['complex', { id: '9b41b315-d9c5-42ed-b1f4-fbc58fc019b6', capacity: 150 }],
-  ['virgo', { id: 'babde254-a306-4ea2-8014-59a93687dac6', capacity: 60 }],
+  ['agency', { id: 'b914a176-7ae1-4d7c-9f12-215eca643325', capacity: 60 }],
+  ['nordisk', { id: 'f12f9cad-6ee7-4531-8d28-871301547c99', capacity: 40 }],
+  ['territory', { id: 'da46fe37-364b-4296-b19d-49f60cc3abcc', capacity: 24 }],
+  ['new agency', { id: '00d419cb-665b-46ec-916a-8bf9b5aae7c6', capacity: 240 }],
+  ['domain', { id: '7f9c1807-8002-4d4d-b83c-bb9e4ddb80ed', capacity: 150 }],
+  ['mosaïc', { id: 'd134b7b4-8911-458b-a9ec-5e4aa672edd7', capacity: 50 }],
+  ['complex', { id: '37c4a228-3c3b-4732-959d-035510abd66f', capacity: 150 }],
+  ['virgo', { id: '3db08536-548a-49f5-81e1-80ed39f1954f', capacity: 60 }],
+  ['cercle', { id: '60c1afa3-4d53-40c1-b8ae-b9641fc038db', capacity: 40 }],
 ]);
 
 function makeEventsPageURL(pageNum: number) {
