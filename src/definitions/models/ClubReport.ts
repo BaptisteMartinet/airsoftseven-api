@@ -26,11 +26,13 @@ const ClubReport: Model<ClubReportModel> = new Model({
     club: {
       model: Club,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
     report: {
       model: Report,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
   }),

@@ -25,11 +25,13 @@ const UserReport: Model<UserReportModel> = new Model({
     user: {
       model: User,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
     report: {
       model: Report,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
   }),

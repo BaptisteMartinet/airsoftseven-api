@@ -18,11 +18,13 @@ const EventInterest: Model<EventInterestModel> = new Model({
     event: {
       model: Event,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
     user: {
       model: User,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
   }),

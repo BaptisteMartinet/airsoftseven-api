@@ -21,6 +21,7 @@ const FieldPlaygroundType: Model<FieldPlaygroundTypeModel> = new Model({
     field: {
       model: Field,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
   }),

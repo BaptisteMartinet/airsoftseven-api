@@ -41,14 +41,14 @@ const Field: Model<FieldModel> = new Model({
     events: {
       model: Event,
       type: 'hasMany',
-      exposed: true,
       deleteCascade: true,
+      exposed: true,
     },
     reports: {
       model: FieldReport,
       type: 'hasMany',
-      exposed: false,
       deleteCascade: true,
+      exposed: false,
     },
     playgroundTypes: {
       model: FieldPlaygroundType,

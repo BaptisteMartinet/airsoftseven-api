@@ -35,6 +35,7 @@ const User: Model<UserModel> = new Model({
     sessions: {
       model: Session,
       type: 'hasMany',
+      deleteCascade: true,
       exposed: false,
     },
     clubs: {
@@ -58,12 +59,14 @@ const User: Model<UserModel> = new Model({
     reports: {
       model: Report,
       type: 'hasMany',
+      deleteCascade: true,
       foreignKey: 'authorId',
       exposed: true,
     },
     userReports: {
       model: UserReport,
       type: 'hasMany',
+      deleteCascade: true,
       exposed: false,
     },
     eventsInterests: {

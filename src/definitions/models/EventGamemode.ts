@@ -22,6 +22,7 @@ const EventGamemode: Model<EventTypeModel> = new Model({
     event: {
       model: Event,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
   }),

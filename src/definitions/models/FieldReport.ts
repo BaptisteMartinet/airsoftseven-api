@@ -26,11 +26,13 @@ const FieldReport: Model<FieldReportModel> = new Model({
     field: {
       model: Field,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
     report: {
       model: Report,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
   }),

@@ -47,11 +47,13 @@ const Event: Model<EventModel> = new Model({
     club: {
       model: Club,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: true,
     },
     field: {
       model: Field,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: true,
     },
     gamemodes: {
@@ -63,6 +65,7 @@ const Event: Model<EventModel> = new Model({
     reports: {
       model: EventReport,
       type: 'hasMany',
+      deleteCascade: true,
       exposed: false,
     },
     interests: {

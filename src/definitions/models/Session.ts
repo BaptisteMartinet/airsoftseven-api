@@ -24,6 +24,7 @@ const Session: Model<SessionModel> = new Model({
     user: {
       model: User,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: true,
     },
   }),

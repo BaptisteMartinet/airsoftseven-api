@@ -26,11 +26,13 @@ const EventReport: Model<EventReportModel> = new Model({
     event: {
       model: Event,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
     report: {
       model: Report,
       type: 'belongsTo',
+      deleteCascade: true,
       exposed: false,
     },
   }),
