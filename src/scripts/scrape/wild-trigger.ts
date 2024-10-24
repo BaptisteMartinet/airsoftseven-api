@@ -67,7 +67,7 @@ function parseRawEventDateAndDuration(rawDate: string) {
     const startDate = parseRawEventDate(dates[0]);
     const endDate = parseRawEventDate(dates[1]);
     const daysDiff = differenceInDays(endDate, startDate);
-    return { date: startDate, durationDays: daysDiff };
+    return { date: startDate, durationDays: Math.abs(daysDiff) }; // Using absolute because some dates are reversed on wild trigger website
   }
   throw new Error(`Invalid date format: ${rawDate}`);
 }
