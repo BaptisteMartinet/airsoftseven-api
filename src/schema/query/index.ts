@@ -98,5 +98,26 @@ export default new GraphQLObjectType<unknown, Context>({
     field: makeFindBySlugField(Field),
 
     user: makeFindBySlugField(User),
+
+    eventsCount: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve(_, args, ctx) {
+        return Event.model.count();
+      },
+    },
+
+    clubsCount: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve(_, args, ctx) {
+        return Club.model.count();
+      },
+    },
+
+    fieldsCount: {
+      type: new GraphQLNonNull(GraphQLInt),
+      resolve(_, args, ctx) {
+        return Field.model.count();
+      },
+    },
   }),
 });
