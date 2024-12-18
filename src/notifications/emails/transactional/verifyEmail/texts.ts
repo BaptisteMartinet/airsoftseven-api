@@ -17,8 +17,20 @@ const FR: Definition = {
   },
 };
 
+const EN: Definition = {
+  subject: 'Validate your email',
+  formatText(code: string) {
+    return [
+      `Please validate your email address by entering the following code: ${code}`,
+      'We are thrilled to count you among our first users!',
+      "- The AirsoftSeven team",
+    ].join('\n\n');
+  },
+};
+
 export default genTextsGetter<Definition>(
   new Map([
-    [Language.French, FR], // TODO EN
+    [Language.French, FR],
+    [Language.English, EN],
   ]),
 );

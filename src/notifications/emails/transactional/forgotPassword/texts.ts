@@ -17,8 +17,20 @@ const FR: Definition = {
   },
 };
 
+const EN: Definition = {
+  subject: 'Password reset',
+  formatText(code: string) {
+    return [
+      `Please reset your password by entering the following code: ${code}`,
+      "If you did not make this request, please contact the support as soon as possible.",
+      "- The AirsoftSeven team",
+    ].join('\n\n');
+  },
+};
+
 export default genTextsGetter<Definition>(
   new Map([
-    [Language.French, FR], // TODO EN
+    [Language.French, FR],
+    [Language.English, EN],
   ]),
 );
