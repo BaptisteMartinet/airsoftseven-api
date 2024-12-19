@@ -15,6 +15,7 @@ import { exposeModel, genModelOffsetPagination } from '@sequelize-graphql/core';
 import db from '@/db';
 import { ResourceDoesNotExist } from '@/utils/errors';
 import { Hour } from '@/utils/time';
+import { LanguageEnum } from '@/definitions/enums';
 import { Session, Event, Club, Field, User } from '@definitions/models';
 import { ensureSession } from '@/definitions/helpers/Session';
 
@@ -54,6 +55,14 @@ export default new GraphQLObjectType<unknown, Context>({
           return null;
         }
       },
+    },
+
+    language: {
+      type: LanguageEnum.gqlType,
+      resolve(_, args, ctx)
+      {
+        return ctx.language;
+      }
     },
 
     events: genModelOffsetPagination(Event, {
