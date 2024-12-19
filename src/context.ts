@@ -15,7 +15,7 @@ export interface Context extends ContextBase {
 
 export default async function createContext(args: { req: Request; res: Response }): Promise<Context> {
   const { req, res } = args;
-  const languageCookie = req.cookies['NEXT_LOCALE'];
+  const languageCookie = req.cookies.locale;
   const language = languageCookie ? ensureStrLanguage(languageCookie) : DefaultLanguage;
   const sessionId = req.signedCookies.session;
   return {
