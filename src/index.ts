@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { __PORT__, __COOKIES_SECRET_KEY__, __PROD__, __DOMAIN_FULL__ } from '@constants/env';
 import db from './db';
 import context from './context';
@@ -19,7 +20,10 @@ async function main() {
   const server = new ApolloServer({
     schema,
     introspection: true,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+    ],
   });
   await server.start();
 
